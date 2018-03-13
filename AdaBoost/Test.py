@@ -25,7 +25,7 @@ X_test, Y_test = test[:, :-1], test[:, -1]
 #
 
 clf = DecisionTreeClassifier(criterion="entropy",
-                             max_depth=2,
+                             max_depth=3,
                              random_state=325)
 
 
@@ -34,14 +34,15 @@ clf = DecisionTreeClassifier(criterion="entropy",
 #
 
 # Set the number of iterations
-M = 10
+M = 200
 abt = AdaBoostTree(M, clf)
 
 # Fit training data
-abt.fit(X_train, Y_train)
+abt.fit(X_train, Y_train, X_test, Y_test,
+        verbose=True, vb_num=10)
 
 # Predict test data
-abt.predict(X_test, Y_test)
+abt.predict(X_test)
 
 # Plot learning curves
 abt.plot_curve()

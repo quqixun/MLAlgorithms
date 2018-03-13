@@ -1,4 +1,6 @@
+import copy
 import numpy as np
+from tqdm import *
 import matplotlib.pyplot as plt
 
 
@@ -6,46 +8,103 @@ class AdaBoostTree(object):
 
     def __init__(self, M, clf):
         self.M = M
-        self.clf = clf
+        self.init_clf = clf
         self.clfs = None
-        self.errs = None
+        self.train_errs = None
+        self.test_errs = None
         self.alphas = None
-
         return
 
-    def fit(self, X_train, Y_train):
+    def fit(self,
+            X_train, Y_train,
+            X_test, Y_test,
+            verbose=True, vb_num=10):
         self.clfs = []
-        self.errs = []
+        self.train_errs = []
+        self.test_errs = []
         self.alphas = []
 
-        num = len(X_train)
-        weights = np.ones(num) / num
-        pred_train = np.zeros(num)
+        train_num = len(X_train)
+        test_num = len(X_test)
+        weights = np.ones(train_num) / train_num
+        ws_pred_train = np.zeros(train_num)
+        ws_pred_test = np.zeros(test_num)
 
-        for m in range(self.M):
-            self.clf.fit(X_train, Y_train,
-                         sample_weight=weights)
-            self.clfs.append(self.clf)
+        print("\nAdaBoostTree - {} Iterations".format(self.M))
+        iter_range = range(self.M)
+        if not verbose:
+            iter_range = tqdm(iter_range)
 
-            Y_pred = self.clf.predict(X_train)
-            Y_miss = [int(y) for y in (Y_pred != Y_train)]
+        for m in iter_range:
+            clf = copy.copy(self.init_clf)
+            clf.fit(X_train, Y_train, sample_weight=weights)
+            self.clfs.append(clf)
+
+            Y_pred_train = clf.predict(X_train)
+            Y_miss = [int(y) for y in (Y_pred_train != Y_train)]
 
             err = np.dot(weights, Y_miss)
-            self.errors.append(err)
-
             alpha = np.log((1 - err) / err) / 2.0
             self.alphas.append(alpha)
 
-            exp = [np.exp(-1 * alpha * Y_train[i] * Y_pred[i]) for i in range(num)]
+            exp = [np.exp(-1 * alpha * Y_train[i] * Y_pred_train[i])
+                   for i in range(train_num)]
             Z = np.dot(weights, exp)
             weights = [w / Z * e for w, e in zip(weights, exp)]
 
-            pred_train += alpha * pred_train
+            ws_pred_train, train_error_rate = \
+                self._update_pred(ws_pred_train, Y_pred_train, Y_train, alpha)
+            self.train_errs.append(train_error_rate)
+
+            Y_pred_test = clf.predict(X_test)
+            ws_pred_test, test_error_rate = \
+                self._update_pred(ws_pred_test, Y_pred_test, Y_test, alpha)
+            self.test_errs.append(test_error_rate)
+
+            if (m + 1) % 10 != 0 and m != 0:
+                continue
+
+            if verbose:
+                print("Iteration {}".format(m + 1))
+                self._print_metrics(train_error_rate, test_error_rate)
+
+        if not verbose:
+            self._print_metrics(train_error_rate, test_error_rate)
 
         return
 
-    def predict(self, X_test, Y_test):
-        return
+    def predict(self, X):
+        pred = np.zeros(len(X))
+        for clf, alpha in zip(self.clfs, self.alphas):
+            Y_pred = clf.predict(X)
+            pred += alpha * Y_pred
+        return np.sign(pred)
 
     def plot_curve(self):
+        x = np.arange(self.M) + 1
+        plt.figure()
+        plt.plot(x, self.train_errs, label="Train")
+        plt.plot(x, self.test_errs, label="Test")
+        plt.xlim((0, self.M))
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=12)
+        plt.ylabel("Error Rate", fontsize=16)
+        plt.xlabel("Iteration", fontsize=16)
+        plt.legend(loc=1, fontsize=14)
+        plt.grid("on", ls="--", alpha=0.5)
+        plt.tight_layout()
+        plt.show()
+        return
+
+    def _update_pred(self, ws_pred, Y_pred, Y_true, alpha):
+        ws_pred += alpha * Y_pred
+        error_rate = self._get_error_rate(Y_true, np.sign(ws_pred))
+        return ws_pred, error_rate
+
+    def _get_error_rate(self, Y_true, Y_pred):
+        return sum(Y_pred != Y_true) / float(len(Y_pred))
+
+    def _print_metrics(self, train_error_rate, test_error_rate):
+        print("Training Error Rate: {0:.6f}".format(train_error_rate),
+              "Testing Error Rate: {0:.6f}".format(test_error_rate))
         return
