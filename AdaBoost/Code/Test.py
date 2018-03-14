@@ -1,4 +1,20 @@
-# The script to test class "AdaBoostTree".
+# Conventional Machine Learning Algorithms
+# The Script to Test Class "AdaBoostTree".
+# Author: Qixun Qu
+# Create on: 2018/03/13
+# Modify on: 2018/03/14
+
+#     ,,,         ,,,
+#   ;"   ';     ;'   ",
+#   ;  @.ss$$$$$$s.@  ;
+#   `s$$$$$$$$$$$$$$$'
+#   $$$$$$$$$$$$$$$$$$
+#  $$$$P""Y$$$Y""W$$$$$
+#  $$$$  p"$$$"q  $$$$$
+#  $$$$  .$$$$$.  $$$$'
+#   $$$DaU$$O$$DaU$$$'
+#    '$$$$'.^.'$$$$'
+#       '&$$$$$&'
 
 
 import numpy as np
@@ -8,7 +24,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 
 
-#
+# Step 1
 # Generate Dataset for training and testing.
 #
 
@@ -20,7 +36,7 @@ X_train, Y_train = train[:, :-1], train[:, -1]
 X_test, Y_test = test[:, :-1], test[:, -1]
 
 
-#
+# Step 2
 # Generate the classifier.
 #
 
@@ -29,17 +45,19 @@ clf = DecisionTreeClassifier(criterion="entropy",
                              random_state=325)
 
 
-#
+# Step 3
 # Test class "AdaBoostTree"
 #
 
 # Set the number of iterations
 M = 200
+
+# Initialize the object
 abt = AdaBoostTree(M, clf)
 
 # Fit training data
 abt.fit(X_train, Y_train, X_test, Y_test,
-        verbose=True, vb_num=10)
+        verbose=True, vb_num=100)
 
 # Predict test data
 abt.predict(X_test)
