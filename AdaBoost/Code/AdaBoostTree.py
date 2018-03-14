@@ -1,3 +1,26 @@
+
+# Conventional Machine Learning Algorithms
+# Class of "AdaBoostTree".
+# Author: Qixun Qu
+# Create on: 2018/03/13
+# Modify on: 2018/03/14
+
+#     ,,,         ,,,
+#   ;"   ';     ;'   ",
+#   ;  @.ss$$$$$$s.@  ;
+#   `s$$$$$$$$$$$$$$$'
+#   $$$$$$$$$$$$$$$$$$
+#  $$$$P""Y$$$Y""W$$$$$
+#  $$$$  p"$$$"q  $$$$$
+#  $$$$  .$$$$$.  $$$$'
+#   $$$DaU$$O$$DaU$$$'
+#    '$$$$'.^.'$$$$'
+#       '&$$$$$&'
+
+
+from __future__ import print_function
+
+
 import copy
 import numpy as np
 from tqdm import *
@@ -7,25 +30,50 @@ import matplotlib.pyplot as plt
 class AdaBoostTree(object):
 
     def __init__(self, M, clf):
+        '''__INIT__
+
+            Initialization of the object to indicate the
+            number of iteration and the classifier.
+
+            Inputs:
+            -------
+
+            - M : int, the number of iteration.
+            - clf : object of sklearn.tree, the classifier.
+
+        '''
+
+        # Set the number of iteration
         self.M = M
+
+        # Set the initial classifier
         self.init_clf = clf
+
+        # A list to store the fitted classifier
+        # of each iteration
         self.clfs = None
-        self.train_errs = None
-        self.test_errs = None
+
+        # A list to store alpha of each iteration
         self.alphas = None
+
+        # Lists to store error rates of training set
+        # and test set in each iteration
+        self.test_errs = None
+        self.train_errs = None
+
         return
 
     def fit(self,
             X_train, Y_train,
             X_test, Y_test,
-            verbose=True, vb_num=10):
+            verbose=True,
+            vb_num=10):
         self.clfs = []
-        self.train_errs = []
-        self.test_errs = []
         self.alphas = []
+        self.test_errs = []
+        self.train_errs = []
 
-        train_num = len(X_train)
-        test_num = len(X_test)
+        train_num, test_num = len(X_train), len(X_test)
         weights = np.ones(train_num) / train_num
         ws_pred_train = np.zeros(train_num)
         ws_pred_test = np.zeros(test_num)
@@ -61,7 +109,7 @@ class AdaBoostTree(object):
                 self._update_pred(ws_pred_test, Y_pred_test, Y_test, alpha)
             self.test_errs.append(test_error_rate)
 
-            if (m + 1) % 10 != 0 and m != 0:
+            if (m + 1) % vb_num != 0 and m != 0:
                 continue
 
             if verbose:
