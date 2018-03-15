@@ -11,4 +11,4 @@ Implementations of Conventional Machine Learning Algorithms.
 
 ## 1. AdaBoost
 
-![LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/AdaBoost)
+[LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/AdaBoost)
