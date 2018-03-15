@@ -2,7 +2,7 @@
 # Class of "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/03/15
+# Modify on: 2018/03/16
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -138,19 +138,19 @@ class AdaBoostTree(object):
             # 1 means "miss" (not equal), 0 means "hit" (equal)
             Y_miss = [int(y) for y in (Y_pred_train != Y_train)]
 
-            # Compute error
+            # Compute error as Equation (1)
             err = np.dot(weights, Y_miss)
-            # Compute alpha
+            # Compute alpha as Equation (2)
             alpha = np.log((1 - err) / err) / 2.0
             # Add alpha into the list of alphas
             self.alphas.append(alpha)
 
-            # Compute exponential part
+            # Compute exponential part in Equations (4) and (5)
             exp = [np.exp(-1 * alpha * Y_train[i] * Y_pred_train[i])
                    for i in range(train_num)]
-            # Compute the regularization term
+            # Compute the regularization term as Equation (5)
             Z = np.dot(weights, exp)
-            # Upate weights for next iteration
+            # Upate weights for next iteration as Equation (3)
             weights = [w / Z * e for w, e in zip(weights, exp)]
 
             # Update prediction of training set
@@ -262,9 +262,10 @@ class AdaBoostTree(object):
 
         '''
 
-        # Update predictions
+        # Update predictions as Equation (6)
         ws_pred += alpha * Y_pred
-        # Compute error rate
+        # Compute error rate of final classifier
+        # in ith iteration as Euqation (7)
         error_rate = self._get_error_rate(Y_true, np.sign(ws_pred))
 
         return ws_pred, error_rate
