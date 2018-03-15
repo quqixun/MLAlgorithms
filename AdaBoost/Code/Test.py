@@ -2,7 +2,7 @@
 # The Script to Test Class "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/03/14
+# Modify on: 2018/03/15
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -57,7 +57,7 @@ abt = AdaBoostTree(M, clf)
 
 # Fit training data
 abt.fit(X_train, Y_train, X_test, Y_test,
-        verbose=True, vb_num=100)
+        verbose=True, vb_num=10)
 
 # Predict test data
 abt.predict(X_test)
