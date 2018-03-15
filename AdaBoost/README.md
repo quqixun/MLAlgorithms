@@ -9,6 +9,8 @@ It should work in Windows and macOS if required libraries are installed.
 The original AdaBoost algorithm can be found [here](http://www.face-rec.org/algorithms/Boosting-Ensemble/decision-theoretic_generalization.pdf).  
 The code implements an [improved version](https://link.springer.com/content/pdf/10.1023%2FA%3A1007614523901.pdf) described as below.
 
+<img src="https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/Images/algorithms.png" alt="Algorithms" width="600">
+
 ## Dataset
 
 According to the document of [scikit-learn](http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_hastie_10_2.html), data used for binary classification  
@@ -23,8 +25,11 @@ y[i] = 1 if np.sum(X[i] ** 2) > 9.34 else -1
 
 ## Performance
 
-Plot learning curves of error rates of training set and test set.
-
+Run the test script in command line.
+```
+python Test.py
+```
+Plot learning curves of error rates of training set and test set.  
 The algorithm works well.
 
-![Learning Curves](https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/Images/learning_curves.png)
+<img src="https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/Images/learning_curves.png" alt="Learning Curves" width="500">
