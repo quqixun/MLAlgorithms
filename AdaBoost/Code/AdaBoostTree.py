@@ -150,7 +150,7 @@ class AdaBoostTree(object):
                    for i in range(train_num)]
             # Compute the regularization term as Equation (5)
             Z = np.dot(weights, exp)
-            # Upate weights for next iteration as Equation (3)
+            # Upate weights for next iteration as Equation (4)
             weights = [w / Z * e for w, e in zip(weights, exp)]
 
             # Update prediction of training set
