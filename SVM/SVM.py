@@ -20,13 +20,16 @@
 import numpy as np
 
 
-class SVM(object):
+class SVC(object):
 
     def __init__(self, C=1.0,
                  kernel="rbf", degree=3,
                  gamma="auto", coef0=1.0,
                  tol=1e-3, max_iter=-1,
-                 random_state=None):
+                 epsilon=1e-3,
+                 random_state=None,
+                 verbose=True,
+                 vb_num=10):
         '''__INIT__
 
             Instance initialization.
@@ -40,13 +43,14 @@ class SVM(object):
         self.coef0 = coef0
         self.tol = tol
         self.max_iter = max_iter
+        self.epsilon = epsilon
         self.random_state = random_state
 
         self.b = None
         self.F = None
         self.N = None
         self.alphas = None
-        self.errors = None
+        self.E = None
         self.error_rates = None
 
         self.X = None
@@ -66,12 +70,14 @@ class SVM(object):
 
         self.b = 0.0
         self.N, self.F = X_train.shape
-        self.alphas = np.zeros(self.N)
-        self.errors = self._E(index="all")
-        self.error_rates = []
 
         if self.gamma == "auto":
             self.gamma = 1.0 / self.F
+
+        self.alphas = np.zeros(self.N)
+        self.E = self._E()
+        self.error_rates = []
+
         return
 
     def _E(self, index="all"):
@@ -81,22 +87,37 @@ class SVM(object):
 
         '''
 
+        # a2 = self.alphas ** 2
+        # y2 = self.y ** 2
+        # k = self._K(self.X, self.X)
+        # loss = 0.5 * np.sum(a2 * y2 * k) - np.sum(self.alphas)
+
         if index == "all":
             X, y = self.X, self.y
         else:
             X, y = self.X[index], self.y[index]
 
-        return self._G(X, y, X) - y
+        return self._G(X=X) - y
+        # return loss
 
-    def _G(self, X_train, y_train, X_test):
+    def _G(self, index=None, X=None):
         '''_G
 
             Decision function
 
         '''
 
-        pred = np.dot(self.alphas * y_train,
-                      self._K(X_train, X_test)) + self.b
+        if index is not None:
+            if index == "all":
+                X = self.X
+            else:
+                X = self.X[index]
+        else:
+            if X is None:
+                X = self.X
+
+        pred = np.dot(self.alphas * self.y,
+                      self._K(self.X, X)) + self.b
 
         return pred
 
@@ -108,13 +129,13 @@ class SVM(object):
         '''
 
         if self.kernel == "linear":
-            return np.dot(x1, x2.T)
+            return np.dot(x1, x2.T) + self.coef0
         elif self.kernel == "poly":
             return (np.dot(x1, x2.T) + self.coef0) ** self.degree
         elif self.kernel == "sigmoid":
             return np.tanh(self.gamma * np.dot(x1, x2.T) + self.coef0)
         elif self.kernel == "rbf":
-            deno = 2 * self.gamma ** 2
+            deno = 2 * (self.gamma ** 2)
             x1_ndim, x2_ndim = np.ndim(x1), np.ndim(x2)
             if x1_ndim == 1 and x2_ndim == 1:
                 return np.exp(-np.linalg.norm(x1 - x2) / deno)
@@ -129,14 +150,66 @@ class SVM(object):
             raise SystemExit
         return
 
+    def _S(self):
+        i1, i2 = 0, 1
+        return i1, i2
+
+    def _U(self, i1, i2):
+        a1_old = self.alphas[i1]
+        a2_old = self.alphas[i2]
+        y1, y2 = self.y[i1], self.y[i2]
+        x1, x2 = self.X[i1], self.X[i2]
+
+        if y1 == y2:
+            L = max(0, a2_old + a1_old - self.C)
+            H = min(self.C, a2_old + a1_old)
+        else:
+            L = max(0, a2_old - a1_old)
+            H = min(self.C, self.C + a2_old - a1_old)
+
+        E1, E2 = self.E[i1], self.E[i2]
+        eta = self._K(x1, x1) + self._K(x2, x2) - 2 * self._K(x1, x2)
+        a2_new_unc = y2 * (E1 - E2) / eta + a2_old
+
+        if a2_new_unc > H:
+            a2_new = H
+        elif a2_new_unc < L:
+            a2_new = L
+        else:
+            a2_new = a2_new_unc
+
+        a1_new = y1 * y2 * (a2_old - a2_new) + a1_old
+        self.alphas[i1] = a1_new
+        self.alphas[i2] = a2_new
+
+        b1_new = self.b - E1 - \
+            y1 * self._K(x1, x1) * (a1_new - a1_old) - \
+            y2 * self._K(x2, x1) * (a2_new - a2_old)
+        b2_new = self.b - E2 - \
+            y1 * self._K(x1, x2) * (a1_new - a1_old) - \
+            y2 * self._K(x2, x2) * (a2_new - a2_old)
+
+        if ((a1_new > 0) and (a1_new < self.C)):
+            self.b = b1_new
+        elif ((a2_new > 0) and (a2_new < self.C)):
+            self.b = b2_new
+        else:
+            self.b = (b1_new + b2_new) / 2.0
+
+        self.E[i1] = self._E(i1)
+        self.E[i2] = self._E(i2)
+
+        print(self.alphas, self.b)
+        return
+
     def fit(self, X_train, y_train,
-            X_test, y_test,
-            verbose=True,
-            vb_num=10):
+            X_test, y_test):
 
         '''FIT
         '''
 
         self._initialize(X_train, y_train)
+        i1, i2 = self._S()
+        self._U(i1, i2)
 
         return
