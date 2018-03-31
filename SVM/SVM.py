@@ -2,7 +2,7 @@
 # Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/03/24
+# Modify on: 2018/03/31
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -42,8 +42,8 @@ class SVC(object):
         self.gamma = gamma
         self.coef0 = coef0
         self.tol = tol
-        self.max_iter = max_iter
         self.epsilon = epsilon
+        self.max_iter = max_iter
         self.random_state = random_state
 
         self.b = None
@@ -51,7 +51,7 @@ class SVC(object):
         self.N = None
         self.alphas = None
         self.E = None
-        self.error_rates = None
+        self.Obj = None
 
         self.X = None
         self.y = None
@@ -76,21 +76,31 @@ class SVC(object):
 
         self.alphas = np.zeros(self.N)
         self.E = self._E()
-        self.error_rates = []
+        self.Obj = self._O()
 
         return
+
+    def _O(self, alphas=None):
+        '''_O
+
+            Objective function.
+
+        '''
+
+        if alphas is None:
+            alphas = self.alphas
+        ao = alphas ** 2
+        yo = self.y ** 2
+        ko = self._K(self.X, self.X)
+        obj = 0.5 * np.sum(ao * yo * ko) - np.sum(alphas)
+        return obj
 
     def _E(self, index="all"):
         '''_E
 
-            Computer error.
+            Compute error.
 
         '''
-
-        # a2 = self.alphas ** 2
-        # y2 = self.y ** 2
-        # k = self._K(self.X, self.X)
-        # loss = 0.5 * np.sum(a2 * y2 * k) - np.sum(self.alphas)
 
         if index == "all":
             X, y = self.X, self.y
@@ -124,7 +134,7 @@ class SVC(object):
     def _K(self, x1, x2):
         '''_K
 
-            Compute features by kernels.
+            Kernel functions.
 
         '''
 
@@ -150,11 +160,7 @@ class SVC(object):
             raise SystemExit
         return
 
-    def _S(self):
-        i1, i2 = 0, 1
-        return i1, i2
-
-    def _U(self, i1, i2):
+    def _take_step(self, i1, i2):
         a1_old = self.alphas[i1]
         a2_old = self.alphas[i2]
         y1, y2 = self.y[i1], self.y[i2]
@@ -202,6 +208,9 @@ class SVC(object):
         print(self.alphas, self.b)
         return
 
+    def _examine_example(self, i2):
+        return
+
     def fit(self, X_train, y_train,
             X_test, y_test):
 
@@ -209,7 +218,5 @@ class SVC(object):
         '''
 
         self._initialize(X_train, y_train)
-        i1, i2 = self._S()
-        self._U(i1, i2)
 
         return
