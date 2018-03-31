@@ -211,8 +211,7 @@ class SVC(object):
     def _examine_example(self, i2):
         return
 
-    def fit(self, X_train, y_train,
-            X_test, y_test):
+    def fit(self, X_train, y_train):
 
         '''FIT
         '''

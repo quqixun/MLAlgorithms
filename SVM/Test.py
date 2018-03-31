@@ -49,5 +49,4 @@ svc = SVC(C=1.0,
           epsilon=1e-3,
           random_state=None)
 
-svc.fit(X_train, Y_train,
-        X_test, Y_test)
+svc.fit(X_train, Y_train)
