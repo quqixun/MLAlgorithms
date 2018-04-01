@@ -40,12 +40,11 @@ X_test, Y_test = test[:, :-1], test[:, -1]
 #
 
 svc = SVC(C=1.0,
-          kernel="sigmoid",
+          kernel="linear",
           degree=2,
           gamma="auto",
           coef0=1.0,
           tol=1e-3,
-          max_iter=-1,
           epsilon=1e-3,
           random_state=None)
 
