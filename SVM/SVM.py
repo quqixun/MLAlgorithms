@@ -25,8 +25,7 @@ class SVC(object):
     def __init__(self, C=1.0,
                  kernel="rbf", degree=3,
                  gamma="auto", coef0=1.0,
-                 tol=1e-3, max_iter=-1,
-                 epsilon=1e-3,
+                 tol=1e-2, epsilon=1e-2,
                  random_state=None,
                  verbose=True,
                  vb_num=10):
@@ -43,7 +42,6 @@ class SVC(object):
         self.coef0 = coef0
         self.tol = tol
         self.epsilon = epsilon
-        self.max_iter = max_iter
         self.random_state = random_state
 
         self.b = None
@@ -110,7 +108,7 @@ class SVC(object):
         return self._G(X=X) - y
         # return loss
 
-    def _G(self, index=None, X=None):
+    def _G(self, index="all", X=None):
         '''_G
 
             Decision function
@@ -161,10 +159,16 @@ class SVC(object):
         return
 
     def _take_step(self, i1, i2):
+
+        if i1 == i2:
+            return 0
+
         a1_old = self.alphas[i1]
         a2_old = self.alphas[i2]
         y1, y2 = self.y[i1], self.y[i2]
         x1, x2 = self.X[i1], self.X[i2]
+        E1, E2 = self.E[i1], self.E[i2]
+        s = y1 * y2
 
         if y1 == y2:
             L = max(0, a2_old + a1_old - self.C)
@@ -173,43 +177,93 @@ class SVC(object):
             L = max(0, a2_old - a1_old)
             H = min(self.C, self.C + a2_old - a1_old)
 
-        E1, E2 = self.E[i1], self.E[i2]
-        eta = self._K(x1, x1) + self._K(x2, x2) - 2 * self._K(x1, x2)
-        a2_new_unc = y2 * (E1 - E2) / eta + a2_old
+        if L == H:
+            return 0
 
-        if a2_new_unc > H:
-            a2_new = H
-        elif a2_new_unc < L:
-            a2_new = L
+        k11 = self._K(x1, x1)
+        k12 = self._K(x1, x2)
+        k22 = self._K(x2, x2)
+        eta = k11 + k22 - 2 * k12
+
+        if eta > 0:
+            a2_new = y2 * (E1 - E2) / eta + a2_old
+            if a2_new > H:
+                a2_new = H
+            elif a2_new < L:
+                a2_new = L
         else:
-            a2_new = a2_new_unc
+            alphas_temp = np.copy(self.alphas)
+            alphas_temp[i2] = L
+            L_obj = self._O(alphas=alphas_temp)
+            alphas_temp[i2] = H
+            H_obj = self._O(alphas=alphas_temp)
 
-        a1_new = y1 * y2 * (a2_old - a2_new) + a1_old
-        self.alphas[i1] = a1_new
-        self.alphas[i2] = a2_new
+            if L_obj < (H_obj - self.epsilon):
+                a2_new = L
+            elif L_obj > (H_obj + self.epsilon):
+                a2_new = H
+            else:
+                a2_new = a2_old
 
-        b1_new = self.b - E1 - \
-            y1 * self._K(x1, x1) * (a1_new - a1_old) - \
-            y2 * self._K(x2, x1) * (a2_new - a2_old)
-        b2_new = self.b - E2 - \
-            y1 * self._K(x1, x2) * (a1_new - a1_old) - \
-            y2 * self._K(x2, x2) * (a2_new - a2_old)
+        if np.abs(a2_new - a2_old) < \
+           self.epsilon * (a2_new + a2_old + self.epsilon):
+            return 0
 
-        if ((a1_new > 0) and (a1_new < self.C)):
+        a1_new = a1_old + s * (a2_old - a2_new)
+
+        b1_new = self.b + E1 + \
+            y1 * k11 * (a1_new - a1_old) + \
+            y2 * k12 * (a2_new - a2_old)
+        b2_new = self.b + E2 + \
+            y1 * k12 * (a1_new - a1_old) + \
+            y2 * k22 * (a2_new - a2_old)
+
+        if (a1_new > 0) and (a1_new < self.C):
             self.b = b1_new
-        elif ((a2_new > 0) and (a2_new < self.C)):
+        elif (a2_new > 0) and (a2_new < self.C):
             self.b = b2_new
         else:
             self.b = (b1_new + b2_new) / 2.0
 
+        self.alphas[i1] = a1_new
+        self.alphas[i2] = a2_new
+
         self.E[i1] = self._E(i1)
         self.E[i2] = self._E(i2)
 
-        print(self.alphas, self.b)
-        return
+        return 1
 
     def _examine_example(self, i2):
-        return
+
+        y2 = self.y[i2]
+        a2 = self.alphas[i2]
+        E2 = self.E[i2]
+        r2 = E2 * y2
+
+        if (r2 < -self.tol and a2 < self.C) or \
+           (r2 > self.tol and a2 > 0):
+            n0nC_list = np.where(np.logical_and(self.alphas != 0,
+                                                self.alphas != self.C))[0]
+            if len(n0nC_list) > 1:
+                if self.E[i2] > 0:
+                    i1 = np.argmin(self.E)
+                else:
+                    i1 = np.argmax(self.E)
+                if self._take_step(i1, i2):
+                    return 1
+
+                np.random.seed(self.random_state)
+                rnd_n0nC_list = np.random.permutation(n0nC_list)
+                for i1 in rnd_n0nC_list:
+                    if self._take_step(i1, i2):
+                        return 1
+
+                np.random.seed(self.random_state)
+                rnd_all_list = np.random.permutation(self.N)
+                for i1 in rnd_all_list:
+                    if self._take_step(i1, i2):
+                        return 1
+        return 0
 
     def fit(self, X_train, y_train):
 
@@ -217,5 +271,26 @@ class SVC(object):
         '''
 
         self._initialize(X_train, y_train)
+
+        num_changed = 0
+        examine_all = 1
+
+        while num_changed > 0 or examine_all:
+            num_changed = 0
+            if examine_all:
+                for i2 in range(self.N):
+                    num_changed += self._examine_example(i2)
+            else:
+                i2_list = np.where(np.logical_and(self.alphas != 0,
+                                                  self.alphas != self.C))[0]
+                for i2 in i2_list:
+                    num_changed += self._examine_example(i2)
+
+            if examine_all:
+                examine_all = 0
+            elif not num_changed:
+                examine_all = 1
+
+        print(self.b)
 
         return
