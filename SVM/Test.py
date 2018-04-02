@@ -67,7 +67,7 @@ def accuracy(y_pred, y_true):
 # Step 1
 
 seed = 9526
-X, y = generate_dataset("blob", 1000, seed)
+X, y = generate_dataset("blob", 2000, seed)
 X_train, y_train, X_test, y_test = split_dataset(X, y, 0.2, seed)
 X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
