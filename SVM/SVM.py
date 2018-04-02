@@ -2,7 +2,7 @@
 # Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/03/31
+# Modify on: 2018/04/02
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
