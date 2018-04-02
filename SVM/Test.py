@@ -17,40 +17,68 @@
 #       '&$$$$$&'
 
 
+from __future__ import print_function
+
+
 import numpy as np
 from SVM import SVC
-from sklearn.datasets import make_hastie_10_2
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
+from sklearn.datasets import make_blobs, make_circles, make_moons
+
+
+def generate_dataset(style="blob",
+                     n_samples=1000,
+                     random_state=None):
+
+    if style == "blob":
+        X, y = make_blobs(n_samples=n_samples,
+                          centers=2,
+                          n_features=2,
+                          random_state=random_state)
+
+    y[y == 0] = -1
+    return X, y
+
+
+def split_dataset(X, y,
+                  test_size=0.2,
+                  random_state=None):
+    data = np.concatenate([X, np.reshape(y, (-1, 1))], axis=1)
+    train, test = train_test_split(data, test_size=0.2,
+                                   random_state=random_state)
+
+    X_train, y_train = train[:, :-1], train[:, -1]
+    X_test, y_test = test[:, :-1], test[:, -1]
+    return X_train, y_train, X_test, y_test
+
+
+def scale_dataset(X_train, X_test):
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    return X_train_scaled, X_test_scaled
+
+
+def accuracy(y_pred, y_true):
+    return np.mean((y_pred == y_true) * 1.0)
 
 
 # Step 1
-# Generate Dataset for training and testing.
-#
 
-X, y = make_hastie_10_2(n_samples=1000,
-                        random_state=9527)
-data = np.concatenate([X, np.reshape(y, (-1, 1))], axis=1)
-train, test = train_test_split(data, test_size=0.2)
+seed = 9526
+X, y = generate_dataset("blob", 1000, seed)
+X_train, y_train, X_test, y_test = split_dataset(X, y, 0.2, seed)
+X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
-X_train, y_train = train[:, :-1], train[:, -1]
-X_test, y_test = test[:, :-1], test[:, -1]
-
-scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
-
-
-# Step 2
-#
-
-svc = SVC(C=1.0,
+svc = SVC(C=1,
           kernel="linear",
-          degree=2,
-          sigma="auto",
           coef0=1.0,
-          tol=1e-3,
-          epsilon=1e-3,
-          random_state=None)
+          tol=1e-2,
+          epsilon=1e-2)
 
 svc.fit(X_train_scaled, y_train)
+blob_pred = svc.predict(X_test_scaled)
+blob_acc = accuracy(blob_pred, y_test)
+
+print("Accuracy of Blob dataset is: ", blob_acc)
