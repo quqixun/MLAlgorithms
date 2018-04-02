@@ -226,6 +226,7 @@ class SVC(object):
         self.alphas[i1] = a1_new
         self.alphas[i2] = a2_new
 
+        self.b = b_new
         self.E = self._E()
 
         if 0.0 < a1_new < self.C:
@@ -243,8 +244,6 @@ class SVC(object):
         #     y1 * (a1_new - a1_old) * self._K(x1, self.X[non_opt]) + \
         #     y2 * (a2_new - a2_old) * self._K(x2, self.X[non_opt]) + \
         #     self.b - b_new
-
-        self.b = b_new
 
         return 1
 
