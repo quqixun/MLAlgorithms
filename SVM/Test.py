@@ -2,7 +2,7 @@
 # Test script for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/24
-# Modify on: 2018/04/02
+# Modify on: 2018/04/03
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -24,21 +24,60 @@ from utils import *
 from SVM import SVC
 
 
-# Step 1
+random_state = 9527
+n_samples = 500
+test_size = 0.2
 
-seed = 9526
-X, y = generate_dataset("blob", 2000, seed)
-X_train, y_train, X_test, y_test = split_dataset(X, y, 0.2, seed)
+
+# Blob
+
+X, y = generate_dataset("blob", n_samples, random_state)
+X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
+                                                 random_state)
 X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 svc = SVC(C=1,
           kernel="linear",
-          coef0=1.0,
-          tol=1e-2,
-          epsilon=1e-2)
+          coef0=1.0)
 
 svc.fit(X_train_scaled, y_train)
 blob_pred = svc.predict(X_test_scaled)
 blob_acc = accuracy(blob_pred, y_test)
 
 print("Accuracy of Blob dataset is: ", blob_acc)
+
+
+# Circle
+
+X, y = generate_dataset("circle", n_samples, random_state)
+X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
+                                                 random_state)
+X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
+
+svc = SVC(C=1,
+          kernel="rbf",
+          sigma=1)
+
+svc.fit(X_train_scaled, y_train)
+circle_pred = svc.predict(X_test_scaled)
+circle_acc = accuracy(circle_pred, y_test)
+
+print("Accuracy of Circle dataset is: ", circle_acc)
+
+# Moon
+
+X, y = generate_dataset("moon", n_samples, random_state)
+X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
+                                                 random_state)
+X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
+
+svc = SVC(C=1,
+          kernel="poly",
+          coef0=1.0,
+          degree=3)
+
+svc.fit(X_train_scaled, y_train)
+moon_pred = svc.predict(X_test_scaled)
+moon_acc = accuracy(moon_pred, y_test)
+
+print("Accuracy of Moon dataset is: ", moon_acc)
