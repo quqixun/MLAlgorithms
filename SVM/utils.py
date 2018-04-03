@@ -2,7 +2,7 @@
 # Helper functions for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/04/02
-# Modify on: 2018/04/02
+# Modify on: 2018/04/03
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -17,7 +17,10 @@
 #       '&$$$$$&'
 
 
+from __future__ import print_function
+
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_blobs, make_circles, make_moons
@@ -31,6 +34,15 @@ def generate_dataset(style="blob",
         X, y = make_blobs(n_samples=n_samples,
                           centers=2,
                           n_features=2,
+                          random_state=random_state)
+    elif style == "circle":
+        X, y = make_circles(n_samples=n_samples,
+                            noise=0.1,
+                            factor=0.1,
+                            random_state=random_state)
+    elif style == "moon":
+        X, y = make_moons(n_samples=n_samples,
+                          noise=0.1,
                           random_state=random_state)
 
     y[y == 0] = -1
