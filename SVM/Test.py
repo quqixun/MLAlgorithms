@@ -45,6 +45,7 @@ blob_pred = svc.predict(X_test_scaled)
 blob_acc = accuracy(blob_pred, y_test)
 
 print("Accuracy of Blob dataset is: ", blob_acc)
+plot_decision_boundary(svc)
 
 
 # Circle
@@ -63,6 +64,8 @@ circle_pred = svc.predict(X_test_scaled)
 circle_acc = accuracy(circle_pred, y_test)
 
 print("Accuracy of Circle dataset is: ", circle_acc)
+plot_decision_boundary(svc)
+
 
 # Moon
 
@@ -81,3 +84,4 @@ moon_pred = svc.predict(X_test_scaled)
 moon_acc = accuracy(moon_pred, y_test)
 
 print("Accuracy of Moon dataset is: ", moon_acc)
+plot_decision_boundary(svc)
