@@ -288,7 +288,8 @@ class SVC(object):
 
         return
 
-    def predict(self, X_test):
+    def predict(self, X_test, sign=True):
         pred = self._G(X=X_test)
-        pred = (pred >= 0) * 2 - 1
+        if sign:
+            pred = (pred >= 0) * 2 - 1
         return pred
