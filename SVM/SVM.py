@@ -2,7 +2,7 @@
 # Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/04/02
+# Modify on: 2018/04/03
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -16,6 +16,8 @@
 #    '$$$$'.^.'$$$$'
 #       '&$$$$$&'
 
+
+from __future__ import print_function
 
 import numpy as np
 
@@ -83,26 +85,20 @@ class SVC(object):
 
         if alphas is None:
             alphas = self.alphas
-        ao = alphas ** 2
-        yo = self.y ** 2
-        ko = self._K(self.X, self.X)
-        obj = np.sum(alphas) - 0.5 * np.sum(ao * ko * yo)
+
+        obj = np.sum(alphas) - 0.5 * np.sum(alphas ** 2 *
+                                            self._K(self.X, self.X) *
+                                            self.y ** 2)
         return obj
 
-    def _E(self, index=None):
+    def _E(self):
         '''_E
 
             Compute error.
 
         '''
 
-        if index is None:
-            X, y = self.X, self.y
-        else:
-            X, y = self.X[index], self.y[index]
-
-        return self._G(X=X) - y
-        # return loss
+        return self._G(X=self.X) - self.y
 
     def _G(self, index=None, X=None):
         '''_G
@@ -111,11 +107,8 @@ class SVC(object):
 
         '''
 
-        if index is not None:
-            X = self.X[index]
-        else:
-            if X is None:
-                X = self.X
+        if X is None:
+            X = self.X
 
         pred = np.dot(self.alphas * self.y,
                       self._K(self.X, X)) - self.b
@@ -198,9 +191,9 @@ class SVC(object):
             else:
                 a2_new = a2_old
 
-        if a2_new < 1e-8 and a2_new > 0:
+        if 0 < a2_new < 1e-8:
             a2_new = 0.0
-        elif a2_new > (self.C - 1e-8) and a2_new < self.C:
+        elif (self.C - 1e-8) < a2_new < self.C:
             a2_new = self.C
 
         if (np.abs(a2_new - a2_old) <
@@ -216,17 +209,16 @@ class SVC(object):
                   y1 * k12 * (a1_new - a1_old) +
                   y2 * k22 * (a2_new - a2_old))
 
-        if a1_new > 0 and a1_new < self.C:
-            b_new = b1_new
-        elif a2_new > 0 and a2_new < self.C:
-            b_new = b2_new
+        if 0 < a1_new < self.C:
+            self.b = b1_new
+        elif 0 < a2_new < self.C:
+            self.b = b2_new
         else:
-            b_new = (b1_new + b2_new) / 2.0
+            self.b = (b1_new + b2_new) / 2.0
 
         self.alphas[i1] = a1_new
         self.alphas[i2] = a2_new
 
-        self.b = b_new
         self.E = self._E()
 
         if 0.0 < a1_new < self.C:
@@ -234,16 +226,6 @@ class SVC(object):
 
         if 0.0 < a2_new < self.C:
             self.E[i2] = 0.0
-
-        # self.E[i1] = self._E(i1)
-        # self.E[i2] = self._E(i2)
-        # self.E = self._E()
-
-        # non_opt = [i for i in range(self.N) if i != i1 and i != i2]
-        # self.E[non_opt] = self.E[non_opt] + \
-        #     y1 * (a1_new - a1_old) * self._K(x1, self.X[non_opt]) + \
-        #     y2 * (a2_new - a2_old) * self._K(x2, self.X[non_opt]) + \
-        #     self.b - b_new
 
         return 1
 
