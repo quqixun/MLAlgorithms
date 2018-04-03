@@ -70,3 +70,25 @@ def scale_dataset(X_train, X_test):
 
 def accuracy(y_pred, y_true):
     return np.mean((y_pred == y_true) * 1.0)
+
+
+def plot_decision_boundary(model):
+
+    def get_range(feat):
+        x_min, x_max = model.X[:, feat].min(), model.X[:, feat].max()
+        return np.linspace(x_min, x_max, 100)
+
+    x0_range, x1_range = get_range(0), get_range(1)
+    X_grid = np.array(np.meshgrid(x0_range, x1_range, indexing="xy"))
+    X_grid = np.transpose(X_grid, (1, 2, 0)).reshape((-1, 2))
+    preds = model.predict(X_grid, sign=False).reshape((100, 100))
+
+    plt.figure()
+    plt.contour(x0_range, x1_range, preds, (-1, 0, 1),
+                linestyles=("--", "-", "--"),
+                colors=("r", "k", "b"))
+    plt.scatter(model.X[:, 0], model.X[:, 1], c=model.y,
+                lw=0, alpha=0.5, cmap="RdYlBu")
+    plt.show()
+
+    return
