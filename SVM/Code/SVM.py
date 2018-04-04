@@ -1,8 +1,17 @@
 # Conventional Machine Learning Algorithms
-# Class of "SVM".
+# Class of "SVC".
 # Author: Qixun Qu
 # Create on: 2018/03/23
 # Modify on: 2018/04/04
+
+# References:
+# [1] Sequential Minimal Optimization:
+#     A Fast Algorithm for Training Support Vector Machines.
+#     John C. Platt, 1998. See the pseudo-code in Section 2.5.
+# [2] Implementing a Support Vector Machine using
+#     Sequential Minimal Optimization and Python 3.5.
+#     From: http://jonchar.net/notebooks/SVM/
+#     I copy the statements to generate RBF kernel.
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -191,11 +200,6 @@ class SVC(object):
             else:
                 a2_new = a2_old
 
-        if 0 < a2_new < 1e-8:
-            a2_new = 0.0
-        elif (self.C - 1e-8) < a2_new < self.C:
-            a2_new = self.C
-
         if (np.abs(a2_new - a2_old) <
            self.epsilon * (a2_new + a2_old + self.epsilon)):
             return 0
@@ -220,12 +224,6 @@ class SVC(object):
         self.alphas[i2] = a2_new
 
         self.E = self._E()
-
-        if 0.0 < a1_new < self.C:
-            self.E[i1] = 0.0
-
-        if 0.0 < a2_new < self.C:
-            self.E[i2] = 0.0
 
         return 1
 
