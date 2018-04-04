@@ -80,8 +80,10 @@ def plot_decision_boundary(model, X_test=None, y_test=None):
 
     if (X_test is not None) and (y_test is not None):
         X, y = X_test, y_test
+        title = "Test Set"
     else:
         X, y = model.X, model.y
+        title = "Train Set"
 
     x0_range, x1_range = get_range(0), get_range(1)
     X_grid = np.array(np.meshgrid(x0_range, x1_range, indexing="xy"))
@@ -96,6 +98,7 @@ def plot_decision_boundary(model, X_test=None, y_test=None):
                 lw=0, alpha=0.5, cmap="RdYlBu")
     plt.xlabel("Feature 1", fontsize=12)
     plt.ylabel("Feature 2", fontsize=12)
+    plt.title(title, fontsize=14)
     plt.tight_layout()
     plt.show()
 
