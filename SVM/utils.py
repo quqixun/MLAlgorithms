@@ -2,7 +2,7 @@
 # Helper functions for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/04/02
-# Modify on: 2018/04/03
+# Modify on: 2018/04/04
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -72,11 +72,16 @@ def accuracy(y_pred, y_true):
     return np.mean((y_pred == y_true) * 1.0)
 
 
-def plot_decision_boundary(model):
+def plot_decision_boundary(model, X_test=None, y_test=None):
 
     def get_range(feat):
-        x_min, x_max = model.X[:, feat].min(), model.X[:, feat].max()
+        x_min, x_max = X[:, feat].min(), X[:, feat].max()
         return np.linspace(x_min, x_max, 100)
+
+    if (X_test is not None) and (y_test is not None):
+        X, y = X_test, y_test
+    else:
+        X, y = model.X, model.y
 
     x0_range, x1_range = get_range(0), get_range(1)
     X_grid = np.array(np.meshgrid(x0_range, x1_range, indexing="xy"))
@@ -87,8 +92,11 @@ def plot_decision_boundary(model):
     plt.contour(x0_range, x1_range, preds, (-1, 0, 1),
                 linestyles=("--", "-", "--"),
                 colors=("r", "k", "b"))
-    plt.scatter(model.X[:, 0], model.X[:, 1], c=model.y,
+    plt.scatter(X[:, 0], X[:, 1], c=y,
                 lw=0, alpha=0.5, cmap="RdYlBu")
+    plt.xlabel("Feature 1", fontsize=12)
+    plt.ylabel("Feature 2", fontsize=12)
+    plt.tight_layout()
     plt.show()
 
     return
