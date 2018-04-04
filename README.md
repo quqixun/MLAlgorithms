@@ -1,7 +1,7 @@
 # MLAlgorithms
 Implementations of Conventional Machine Learning Algorithms.
 
-## Environment
+## Dependencies
 
 - python 3.6.4
 - tqdm 4.19.7
@@ -12,3 +12,7 @@ Implementations of Conventional Machine Learning Algorithms.
 ## 1. AdaBoost
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/AdaBoost)
+
+## 2. Support Vector Machine
+
+[LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/SVM)
