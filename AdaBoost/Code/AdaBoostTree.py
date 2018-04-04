@@ -2,7 +2,7 @@
 # Class of "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/03/16
+# Modify on: 2018/04/4
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -28,7 +28,8 @@ import matplotlib.pyplot as plt
 
 class AdaBoostTree(object):
 
-    def __init__(self, M, clf):
+    def __init__(self, M, clf,
+                 verbose=True, vb_num=10):
         '''__INIT__
 
             Initialization of the object to indicate the
@@ -39,6 +40,9 @@ class AdaBoostTree(object):
 
             - M : int, the number of iteration.
             - clf : object of sklearn.tree, the classifier.
+            - verbose : boolean, the symbol to determine whether
+                        show logs while training process.
+            - vb_num: int, the interval of iteration to display logs.
 
         '''
 
@@ -47,6 +51,10 @@ class AdaBoostTree(object):
 
         # Set the initial classifier
         self.init_clf = clf
+
+        # Settings for printing logs
+        self.verbose = verbose
+        self.vb_num = vb_num
 
         # A list to store the fitted classifier
         # of each iteration
@@ -63,10 +71,8 @@ class AdaBoostTree(object):
         return
 
     def fit(self,
-            X_train, Y_train,
-            X_test, Y_test,
-            verbose=True,
-            vb_num=10):
+            X_train, y_train,
+            X_test=None, y_test=None):
         '''FIT
 
             Build the classifier based on input data.
@@ -82,25 +88,20 @@ class AdaBoostTree(object):
                         features array of training data.
             - Y_train : array with shape [n_samples],
                         labels array of training data.
-            - X_test : array with shape [n_samples, n_features],
+            - y_test : array with shape [n_samples, n_features],
                        features array of test data.
-            - Y_test : array with shape [n_samples],
+            - y_test : array with shape [n_samples],
                        labels array of test data.
-            - verbose : boolean, the symbol to determine whether
-                        show logs while training process.
-            - vb_num: int, the interval of iteration to display logs.
 
         '''
 
         # Initialize variables as empty list
         self.clfs = []
         self.alphas = []
-        self.test_errs = []
         self.train_errs = []
 
-        # Obtain the number of samples in both
-        # training set and test set
-        train_num, test_num = len(X_train), len(X_test)
+        # Obtain the number of samples in training set
+        train_num = len(X_train)
 
         # Initialize weights of samples
         # In 1st iteration, all samples in training set
@@ -110,14 +111,19 @@ class AdaBoostTree(object):
         # Initialize arrays to store and update predictions
         # of training set and test set in each iteration
         ws_pred_train = np.zeros(train_num)
-        ws_pred_test = np.zeros(test_num)
+
+        # If test set is given
+        if (X_test is not None) and (y_test is not None):
+            self.test_errs = []
+            test_num = len(X_test)
+            ws_pred_test = np.zeros(test_num)
 
         print("\nAdaBoostTree - {} Iterations".format(self.M))
 
         # Create an iterable object according to
         # the number of iteration
         iter_range = range(self.M)
-        if not verbose:
+        if not self.verbose:
             # A progress bar would be shown if no verbose
             iter_range = tqdm(iter_range)
 
@@ -127,26 +133,26 @@ class AdaBoostTree(object):
             clf = copy.copy(self.init_clf)
 
             # Train the classifier based on training set
-            clf.fit(X_train, Y_train, sample_weight=weights)
+            clf.fit(X_train, y_train, sample_weight=weights)
             # Add the fitted classifier into the list of classifiers
             self.clfs.append(clf)
 
             # Compute the prediction of training set
-            Y_pred_train = clf.predict(X_train)
+            y_pred_train = clf.predict(X_train)
             # Obtain a binary list that indicates which labels in
-            # prediction are not euqal to the truth. In Y_miss,
+            # prediction are not euqal to the truth. In y_miss,
             # 1 means "miss" (not equal), 0 means "hit" (equal)
-            Y_miss = [int(y) for y in (Y_pred_train != Y_train)]
+            y_miss = [int(y) for y in (y_pred_train != y_train)]
 
             # Compute error as Equation (1)
-            err = np.dot(weights, Y_miss)
+            err = np.dot(weights, y_miss)
             # Compute alpha as Equation (2)
             alpha = np.log((1 - err) / err) / 2.0
             # Add alpha into the list of alphas
             self.alphas.append(alpha)
 
             # Compute exponential part in Equations (4) and (5)
-            exp = [np.exp(-1 * alpha * Y_train[i] * Y_pred_train[i])
+            exp = [np.exp(-1 * alpha * y_train[i] * y_pred_train[i])
                    for i in range(train_num)]
             # Compute the regularization term as Equation (5)
             Z = np.dot(weights, exp)
@@ -156,27 +162,30 @@ class AdaBoostTree(object):
             # Update prediction of training set
             # and compute error rate
             ws_pred_train, train_error_rate = \
-                self._update_pred(ws_pred_train, Y_pred_train, Y_train, alpha)
+                self._update_pred(ws_pred_train, y_pred_train, y_train, alpha)
             self.train_errs.append(train_error_rate)
 
-            # Predict labels for test set
-            Y_pred_test = clf.predict(X_test)
-            # Update prediction of test set
-            # and compute error rate
-            ws_pred_test, test_error_rate = \
-                self._update_pred(ws_pred_test, Y_pred_test, Y_test, alpha)
-            self.test_errs.append(test_error_rate)
+            if (X_test is not None) and (y_test is not None):
+                # Predict labels for test set
+                y_pred_test = clf.predict(X_test)
+                # Update prediction of test set
+                # and compute error rate
+                ws_pred_test, test_error_rate = \
+                    self._update_pred(ws_pred_test, y_pred_test, y_test, alpha)
+                self.test_errs.append(test_error_rate)
+            else:
+                test_error_rate = None
 
-            if verbose:
+            if self.verbose:
                 # Determine whether print logs according to vb_num
-                if (m + 1) % vb_num != 0 and m != 0:
+                if (m + 1) % self.vb_num != 0 and m != 0:
                     continue
 
                 # Print logs of training iteration
                 print("Iteration {}".format(m + 1))
                 self._print_metrics(train_error_rate, test_error_rate)
 
-        if not verbose:
+        if not self.verbose:
             # Print logs of las iteration
             self._print_metrics(train_error_rate, test_error_rate)
 
@@ -224,20 +233,21 @@ class AdaBoostTree(object):
 
         plt.figure()
         plt.plot(x, self.train_errs, label="Train")
-        plt.plot(x, self.test_errs, label="Test")
+        if self.test_errs is not None:
+            plt.plot(x, self.test_errs, label="Test")
+            plt.legend(loc=1, fontsize=14)
         plt.xlim((0, self.M))
         plt.xticks(fontsize=12)
         plt.yticks(fontsize=12)
         plt.ylabel("Error Rate", fontsize=16)
         plt.xlabel("Iteration", fontsize=16)
-        plt.legend(loc=1, fontsize=14)
         plt.grid("on", ls="--", alpha=0.5)
         plt.tight_layout()
         plt.show()
 
         return
 
-    def _update_pred(self, ws_pred, Y_pred, Y_true, alpha):
+    def _update_pred(self, ws_pred, y_pred, y_true, alpha):
         '''_UPDATE_PRED
 
             Private method to update predictions in each
@@ -249,9 +259,9 @@ class AdaBoostTree(object):
 
             - ws_pred : array with shape [n_samples],
                         old predictions updated from (i-1)th iteration.
-            - Y_pred : array with shape [n_samples],
+            - y_pred : array with shape [n_samples],
                        new predictions of ith iteration.
-            - Y_true : array with shape [n_samples], ground truth.
+            - y_true : array with shape [n_samples], ground truth.
             - alpha : float, computed in ith iteration.
 
             Outputs:
@@ -263,14 +273,14 @@ class AdaBoostTree(object):
         '''
 
         # Update predictions as Equation (6)
-        ws_pred += alpha * Y_pred
+        ws_pred += alpha * y_pred
         # Compute error rate of final classifier
         # in ith iteration as Euqation (7)
-        error_rate = self._get_error_rate(Y_true, np.sign(ws_pred))
+        error_rate = self._get_error_rate(y_true, np.sign(ws_pred))
 
         return ws_pred, error_rate
 
-    def _get_error_rate(self, Y_true, Y_pred):
+    def _get_error_rate(self, y_true, y_pred):
         '''_GET_ERROR_RATE
 
             Private method to compute error rate.
@@ -285,7 +295,7 @@ class AdaBoostTree(object):
         '''
 
         # Compute and return error rate
-        return sum(Y_pred != Y_true) / float(len(Y_pred))
+        return sum(y_pred != y_true) / float(len(y_pred))
 
     def _print_metrics(self, train_error_rate, test_error_rate):
         '''_PRINT_METRICS
@@ -300,7 +310,9 @@ class AdaBoostTree(object):
 
         '''
 
-        print("Training Error Rate: {0:.6f}".format(train_error_rate),
-              "Testing Error Rate: {0:.6f}".format(test_error_rate))
+        log_str = "Training Error Rate: {0:.6f}".format(train_error_rate)
+        if test_error_rate is not None:
+            log_str += "\tTesting Error Rate: {0:.6f}".format(test_error_rate)
+        print(log_str)
 
         return
