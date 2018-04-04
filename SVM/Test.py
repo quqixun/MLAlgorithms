@@ -46,6 +46,7 @@ blob_acc = accuracy(blob_pred, y_test)
 
 print("Accuracy of Blob dataset is: ", blob_acc)
 plot_decision_boundary(svc)
+# plot_decision_boundary(svc, X_test_scaled, y_test)
 
 
 # Circle
@@ -65,6 +66,7 @@ circle_acc = accuracy(circle_pred, y_test)
 
 print("Accuracy of Circle dataset is: ", circle_acc)
 plot_decision_boundary(svc)
+# plot_decision_boundary(svc, X_test_scaled, y_test)
 
 
 # Moon
@@ -85,3 +87,4 @@ moon_acc = accuracy(moon_pred, y_test)
 
 print("Accuracy of Moon dataset is: ", moon_acc)
 plot_decision_boundary(svc)
+# plot_decision_boundary(svc, X_test_scaled, y_test)
