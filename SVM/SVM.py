@@ -2,7 +2,7 @@
 # Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/04/03
+# Modify on: 2018/04/04
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -100,7 +100,7 @@ class SVC(object):
 
         return self._G(X=self.X) - self.y
 
-    def _G(self, index=None, X=None):
+    def _G(self, X=None):
         '''_G
 
             Decision function
@@ -169,10 +169,10 @@ class SVC(object):
         k11 = self._K(x1, x1)
         k12 = self._K(x1, x2)
         k22 = self._K(x2, x2)
-        eta = 2 * k12 - k11 - k22
+        eta = k11 + k22 - 2 * k12
 
-        if eta < 0:
-            a2_new = a2_old - y2 * (E1 - E2) / eta
+        if eta > 0:
+            a2_new = a2_old + y2 * (E1 - E2) / eta
             if a2_new > H:
                 a2_new = H
             elif a2_new < L:
@@ -185,9 +185,9 @@ class SVC(object):
             H_obj = self._O(alphas=alphas_temp)
 
             if L_obj > (H_obj + self.epsilon):
-                a2_new = L
-            elif L_obj < (H_obj - self.epsilon):
                 a2_new = H
+            elif L_obj < (H_obj - self.epsilon):
+                a2_new = L
             else:
                 a2_new = a2_old
 
@@ -291,5 +291,5 @@ class SVC(object):
     def predict(self, X_test, sign=True):
         pred = self._G(X=X_test)
         if sign:
-            pred = (pred >= 0) * 2 - 1
+            pred = np.sign(pred)
         return pred
