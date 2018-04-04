@@ -2,7 +2,7 @@
 # The Script to Test Class "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/03/15
+# Modify on: 2018/04/04
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -24,16 +24,22 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
 
 
+seed = 9527
+n_samples = 10000
+test_size = 0.2
+
 # Step 1
 # Generate Dataset for training and testing.
 #
 
-X, Y = make_hastie_10_2()
-data = np.concatenate([X, np.reshape(Y, (-1, 1))], axis=1)
-train, test = train_test_split(data, test_size=0.2)
+X, y = make_hastie_10_2(n_samples=n_samples,
+                        random_state=seed)
+data = np.concatenate([X, np.reshape(y, (-1, 1))], axis=1)
+train, test = train_test_split(data, test_size=test_size,
+                               random_state=seed)
 
-X_train, Y_train = train[:, :-1], train[:, -1]
-X_test, Y_test = test[:, :-1], test[:, -1]
+X_train, y_train = train[:, :-1], train[:, -1]
+X_test, y_test = test[:, :-1], test[:, -1]
 
 
 # Step 2
@@ -53,11 +59,12 @@ clf = DecisionTreeClassifier(criterion="entropy",
 M = 200
 
 # Initialize the object
-abt = AdaBoostTree(M, clf)
+abt = AdaBoostTree(M, clf,
+                   verbose=True, vb_num=10)
 
 # Fit training data
-abt.fit(X_train, Y_train, X_test, Y_test,
-        verbose=True, vb_num=10)
+abt.fit(X_train, y_train, X_test, y_test)
+# abt.fit(X_train, y_train)
 
 # Predict test data
 abt.predict(X_test)
