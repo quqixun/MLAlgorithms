@@ -20,7 +20,7 @@
 from __future__ import print_function
 
 
-from utils import *
+from Utils import *
 from SVM import SVC
 
 
@@ -58,7 +58,7 @@ X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 svc = SVC(C=1,
           kernel="rbf",
-          sigma=1)
+          sigma=1.0)
 
 svc.fit(X_train_scaled, y_train)
 circle_pred = svc.predict(X_test_scaled)
