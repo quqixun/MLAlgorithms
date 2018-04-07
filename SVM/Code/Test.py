@@ -2,7 +2,7 @@
 # Test script for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/24
-# Modify on: 2018/04/03
+# Modify on: 2018/04/07
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -58,7 +58,7 @@ X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 svc = SVC(C=1,
           kernel="rbf",
-          sigma=1.0)
+          gamma=1.0)
 
 svc.fit(X_train_scaled, y_train)
 circle_pred = svc.predict(X_test_scaled)
