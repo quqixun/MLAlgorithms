@@ -2,7 +2,10 @@
 # Class of "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/04/4
+# Modify on: 2018/04/09
+
+# All equations can be found in my GitHub repo:
+# https://github.com/quqixun/MLAlgorithms/tree/master/AdaBoost
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -17,6 +20,7 @@
 #       '&$$$$$&'
 
 
+from __future__ import division
 from __future__ import print_function
 
 
@@ -224,7 +228,7 @@ class AdaBoostTree(object):
         '''PLOT_CURVES
 
             Plot error rates of training set
-            and test set of each iteration.
+            and test set over all iterations.
 
         '''
 
@@ -295,7 +299,7 @@ class AdaBoostTree(object):
         '''
 
         # Compute and return error rate
-        return sum(y_pred != y_true) / float(len(y_pred))
+        return sum(y_pred != y_true) / len(y_pred)
 
     def _print_metrics(self, train_error_rate, test_error_rate):
         '''_PRINT_METRICS

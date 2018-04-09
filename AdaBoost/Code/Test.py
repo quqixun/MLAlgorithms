@@ -2,7 +2,7 @@
 # The Script to Test Class "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/04/04
+# Modify on: 2018/04/09
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -30,7 +30,6 @@ test_size = 0.2
 
 # Step 1
 # Generate Dataset for training and testing.
-#
 
 X, y = make_hastie_10_2(n_samples=n_samples,
                         random_state=seed)
@@ -43,8 +42,7 @@ X_test, y_test = test[:, :-1], test[:, -1]
 
 
 # Step 2
-# Generate the classifier.
-#
+# Generate the basic classifier.
 
 clf = DecisionTreeClassifier(criterion="entropy",
                              max_depth=3,
@@ -53,7 +51,6 @@ clf = DecisionTreeClassifier(criterion="entropy",
 
 # Step 3
 # Test class "AdaBoostTree"
-#
 
 # Set the number of iterations
 M = 200
