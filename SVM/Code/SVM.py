@@ -13,6 +13,9 @@
 #     From: http://jonchar.net/notebooks/SVM/
 #     I copy the code to generate RBF kernel.
 
+# In this implementation, all equations can be found in
+# reference [1].
+
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
 #   ;  @.ss$$$$$$s.@  ;
@@ -148,9 +151,10 @@ class SVC(object):
         if alphas is None:
             alphas = self.alphas
 
-        obj = np.sum(alphas) - 0.5 * np.sum(alphas ** 2 *
-                                            self._K(self.X, self.X) *
-                                            self.y ** 2)
+        # Objective function as Equation 11 in [1]
+        obj = 0.5 * np.sum(alphas ** 2 *
+                           self._K(self.X, self.X) *
+                           self.y ** 2) - np.sum(alphas)
         return obj
 
     def _E(self):
@@ -165,6 +169,8 @@ class SVC(object):
 
         '''
 
+        # Compute error according to Equation 10 and
+        # the explainaton of Equation 16
         return self._G(X=self.X) - self.y
 
     def _G(self, X=None):
@@ -189,6 +195,7 @@ class SVC(object):
         if X is None:
             X = self.X
 
+        # Predict as Equation 10
         pred = np.dot(self.alphas * self.y,
                       self._K(self.X, X)) - self.b
 
@@ -262,7 +269,7 @@ class SVC(object):
         E1, E2 = self.E[i1], self.E[i2]
         s = y1 * y2
 
-        # Compute L and H
+        # Compute L and H as Equation 13 and 14
         if y1 == y2:
             L = max(0, a2_old + a1_old - self.C)
             H = min(self.C, a2_old + a1_old)
@@ -273,19 +280,23 @@ class SVC(object):
         if L == H:
             return 0
 
-        # Compute eta
+        # Compute eta as Equation 15
         k11 = self._K(x1, x1)
         k12 = self._K(x1, x2)
         k22 = self._K(x2, x2)
         eta = k11 + k22 - 2 * k12
 
         if eta > 0:
+            # Compute new alpha2 as Equation 16
             a2_new = a2_old + y2 * (E1 - E2) / eta
+            # Clip alpha2 as Equation 17
             if a2_new > H:
                 a2_new = H
             elif a2_new < L:
                 a2_new = L
         else:
+            # Update alpha2 as Equation 19 when
+            # the eta is not possitive
             alphas_temp = np.copy(self.alphas)
             alphas_temp[i2] = L
             # Objective function at a2=L
@@ -305,9 +316,11 @@ class SVC(object):
            self.epsilon * (a2_new + a2_old + self.epsilon)):
             return 0
 
+        # Compute new alpha1 as Equation 18
         a1_new = a1_old + s * (a2_old - a2_new)
 
-        # Update threshold
+        # Update threshold as Equation 20, 21 and
+        # the explaination under Euqation 21
         b1_new = (self.b + E1 +
                   y1 * k11 * (a1_new - a1_old) +
                   y2 * k12 * (a2_new - a2_old))
@@ -350,8 +363,10 @@ class SVC(object):
         E2 = self.E[i2]
         r2 = E2 * y2
 
+        # Check if the example satisfy the KKT condition
         if ((r2 < -self.tol and a2 < self.C) or
            (r2 > self.tol and a2 > 0)):
+            # If not satisfy KKT condition
             # Indices of Langrange multiplier which is not 0 and not C
             n0nC_list = np.where((self.alphas != 0) &
                                  (self.alphas != self.C))[0]
