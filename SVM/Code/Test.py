@@ -27,8 +27,13 @@ from SVM import SVC
 # Basic setting to generate dataset and
 # make experiment reproducibale.
 
+# Seed
 random_state = 9527
+
+# Number of all samples
 n_samples = 500
+
+# Proportion of test set
 test_size = 0.2
 
 

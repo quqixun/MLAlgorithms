@@ -2,7 +2,7 @@
 # Class of "SVC".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/04/07
+# Modify on: 2018/04/09
 
 # References:
 # [1] Sequential Minimal Optimization:
@@ -36,7 +36,7 @@ import numpy as np
 class SVC(object):
 
     def __init__(self, C=1.0,
-                 kernel="rbf", degree=2,
+                 kernel="rbf", degree=3,
                  gamma="auto", coef0=1.0,
                  tol=1e-3, epsilon=1e-3,
                  random_state=None):
@@ -51,7 +51,7 @@ class SVC(object):
             - kernel : string, default is "rbf", kernel type,
                        select one kernel among
                        ["linear", "poly", "sigmoid", "rbf"].
-            - degree : int, default is 2, degree of the polynomial
+            - degree : int, default is 3, degree of the polynomial
                        kernel function (kernel = "poly").
             - gamma : float, default is "auto", parameter for RBF
                       and sigmoid kernel function. If gamma is "auto",
@@ -95,18 +95,33 @@ class SVC(object):
 
             Initialize variables to optimize SVM.
 
+            Inputs:
+            -------
+
+            - X_train : features array of training samples
+                        in shape [n_train_samples, n_features].
+            - y_train : labels list of training samples
+                        in shape [n_train_samples, ].
+
         '''
 
-        self.X = X_train
-        self.y = y_train
+        # Training data
+        self.X, self.y = X_train, y_train
 
+        # Threshold
         self.b = 0.0
+
+        # Number of training samples and
+        # number of features
         self.N, self.F = X_train.shape
 
+        # If gamma is "auto", it equals to 1 / n_features
         if self.gamma == "auto":
             self.gamma = 1.0 / self.F
 
+        # Initialize all Langrange multipliers as 0
         self.alphas = np.zeros(self.N)
+        # Compute initial errors cache
         self.E = self._E()
 
         return
@@ -115,6 +130,18 @@ class SVC(object):
         '''_O
 
             Objective function.
+
+            Input:
+            ------
+
+            - alphas : Langrange multipliers in shape
+                       [n_train_samples, ], default is None.
+                       If None, use self.alphas to compute.
+
+            Output:
+            -------
+
+            - the objection value.
 
         '''
 
@@ -129,7 +156,12 @@ class SVC(object):
     def _E(self):
         '''_E
 
-            Compute error.
+            Compute error of all training samples.
+
+            Output:
+            -------
+
+            - the errors cache in shape [n_train_samples, ].
 
         '''
 
@@ -138,7 +170,19 @@ class SVC(object):
     def _G(self, X=None):
         '''_G
 
-            Decision function
+            Decision function to make prediction of given data.
+
+            Input:
+            ------
+
+            - X : features array of samples to be predicted
+                  in shape [n_samples, n_features], default is None.
+                  When it is None, predict training samples.
+
+            Output:
+            -------
+
+            - the prediction of input data in shape [n_samples, ].
 
         '''
 
@@ -153,7 +197,20 @@ class SVC(object):
     def _K(self, x1, x2):
         '''_K
 
-            Kernel functions.
+            Generates four kernel functions, which are linear,
+            polinomial, sigmoid and RBF.
+
+            Inputs:
+            -------
+
+            - x1, x2: features arrys in shape [n_samples, n_features].
+                      x1 and x2 may have different number of samples,
+                      but the same number of features.
+
+            Output:
+            -------
+
+            - array with shape [n_x1_sample, n_x2_samples].
 
         '''
 
@@ -166,6 +223,8 @@ class SVC(object):
         elif self.kernel == "rbf":
             deno = 2 * (self.gamma ** 2)
             x1_ndim, x2_ndim = np.ndim(x1), np.ndim(x2)
+            # Compute RBF kernel function when the input arrays have
+            # different number of samples
             if x1_ndim == 1 and x2_ndim == 1:
                 return np.exp(-np.linalg.norm(x1 - x2) / deno)
             elif (x1_ndim > 1 and x2_ndim == 1) or \
@@ -180,6 +239,18 @@ class SVC(object):
         return
 
     def _take_step(self, i1, i2):
+        '''_TAKE_STEP
+
+            Inputs:
+            -------
+
+            - i1, i2 : two indices of two choosen
+                       Langrange multipliers.
+
+            Ouput:
+            ------
+
+        '''
 
         if i1 == i2:
             return 0
@@ -261,6 +332,18 @@ class SVC(object):
         return 1
 
     def _examine_example(self, i2):
+        '''EXAMPLE_EXAMPLE
+
+            Input:
+            ------
+
+            - i2 : int, the index of one choosen
+                   Lanrange multiplier.
+
+            Output:
+            -------
+
+        '''
 
         y2 = self.y[i2]
         a2 = self.alphas[i2]
@@ -269,7 +352,7 @@ class SVC(object):
 
         if ((r2 < -self.tol and a2 < self.C) or
            (r2 > self.tol and a2 > 0)):
-            # Indices of examples which is not 0 and not C
+            # Indices of Langrange multiplier which is not 0 and not C
             n0nC_list = np.where((self.alphas != 0) &
                                  (self.alphas != self.C))[0]
             if len(n0nC_list) > 1:
@@ -295,10 +378,22 @@ class SVC(object):
         return 0
 
     def fit(self, X_train, y_train):
-
         '''FIT
+
+            Apply Sequencial Minimal Optimization to train
+            a SVM classificer.
+
+            Inputs:
+            -------
+
+            - X_train : features array of training samples
+                        in shape [n_train_samples, n_features].
+            - y_train : labels list of training samples
+                        in shape [n_train_samples, ].
+
         '''
 
+        # Initialize instance's variablers
         self._initialize(X_train, y_train)
 
         # Main routine
@@ -328,7 +423,25 @@ class SVC(object):
         return
 
     def predict(self, X_test, sign=True):
+        '''PREDICT
+
+            Return the prediction of given data.
+
+            Inputs:
+            -------
+
+            - X_test : features array of test set in shape
+                       [n_test_sample, n_features].
+            - sign : boolean, default is True. If True, reurn the
+                     classification result; else, return the original
+                     prediction.
+
+        '''
+
+        # Original prediction
         pred = self._G(X=X_test)
+
+        # Classification retult
         if sign:
             pred = np.sign(pred)
         return pred
