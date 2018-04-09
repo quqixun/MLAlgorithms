@@ -2,7 +2,7 @@
 # Helper functions for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/04/02
-# Modify on: 2018/04/04
+# Modify on: 2018/04/09
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -61,11 +61,14 @@ def split_dataset(X, y,
     return X_train, y_train, X_test, y_test
 
 
-def scale_dataset(X_train, X_test):
+def scale_dataset(X_train, X_test=None):
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
-    return X_train_scaled, X_test_scaled
+    if X_test is None:
+        return X_train_scaled
+    else:
+        X_test_scaled = scaler.transform(X_test)
+        return X_train_scaled, X_test_scaled
 
 
 def accuracy(y_pred, y_true):
