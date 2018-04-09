@@ -19,11 +19,20 @@
 
 from __future__ import print_function
 
+import os
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_blobs, make_circles, make_moons
+
+
+import warnings
+from sklearn.exceptions import DataConversionWarning
+warnings.filterwarnings("ignore", category=DataConversionWarning)
+
+PARENT_DIR = os.path.dirname(os.path.dirname(os.getcwd()))
+DATA_DIR = os.path.join(PARENT_DIR, "Data")
 
 
 def generate_dataset(style="blob", n_samples=500, random_state=None):
