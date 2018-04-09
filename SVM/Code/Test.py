@@ -47,7 +47,8 @@ X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
 X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 # Create a clissifier using linear kernel
-svc = SVC(C=1, kernel="linear", coef0=1.0)
+svc = SVC(C=1, kernel="linear", coef0=1.0,
+          random_state=random_state)
 
 # Train and test the model
 svc.fit(X_train_scaled, y_train)
@@ -70,7 +71,8 @@ X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
 X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 # Create a clissifier using RBF kernel
-svc = SVC(C=1, kernel="rbf", gamma=1.0)
+svc = SVC(C=1, kernel="rbf", gamma=1.0,
+          random_state=random_state)
 
 # Train and test the model
 svc.fit(X_train_scaled, y_train)
@@ -93,7 +95,8 @@ X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
 X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 # Create a clissifier using polynomial kernel
-svc = SVC(C=1, kernel="poly", coef0=1.0, degree=3)
+svc = SVC(C=1, kernel="poly", coef0=1.0, degree=3,
+          random_state=random_state)
 
 # Train and test the model
 svc.fit(X_train_scaled, y_train)
