@@ -2,7 +2,7 @@
 # Helper functions for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/04/02
-# Modify on: 2018/04/09
+# Modify on: 2018/04/10
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -27,10 +27,13 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_blobs, make_circles, make_moons
 
 
+# Ignore the warning caused by StandardScaler
 import warnings
 from sklearn.exceptions import DataConversionWarning
 warnings.filterwarnings("ignore", category=DataConversionWarning)
 
+
+# Generate path of data directory
 PARENT_DIR = os.path.dirname(os.path.dirname(os.getcwd()))
 DATA_DIR = os.path.join(PARENT_DIR, "Data")
 

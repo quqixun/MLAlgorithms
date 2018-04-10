@@ -2,7 +2,7 @@
 # Test script for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/03/24
-# Modify on: 2018/04/09
+# Modify on: 2018/04/10
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -20,7 +20,7 @@
 from __future__ import print_function
 
 
-from Utils import *
+from utils import *
 from SVM import SVC
 
 
