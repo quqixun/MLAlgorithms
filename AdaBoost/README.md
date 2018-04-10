@@ -27,9 +27,9 @@ y[i] = 1 if np.sum(X[i] ** 2) > 9.34 else -1
 
 Run the test script in command line.
 ```
-python Test.py
+python test.py
 ```
 Plot learning curves of error rates of training set and test set.  
 The algorithm works well.
 
-<img src="https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/Images/learning_curves.png" alt="Learning Curves" width="500">
+<img src="https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/images/learning_curves.png" alt="Learning Curves" width="500">

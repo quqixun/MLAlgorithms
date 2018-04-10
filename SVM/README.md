@@ -12,13 +12,13 @@ It should work in Windows and macOS if required libraries are installed.
 
 Run the test script in command line.
 ```
-python Test.py
+python test.py
 ```
 Plot decision boundaries on both train set and test set.  
 The algorithm works well.
 
-| Dataset    | Train Set | Valid Set |
+| Dataset    | Train Set | Test Set |
 |:----------:|:---------:|:---------:|
-| **Blob**   | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/Images/blob_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/Images/blob_test.png" alt="Learning Curves" width="350"> |
-| **Circle** | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/Images/circle_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/Images/circle_test.png" alt="Learning Curves" width="350"> |
-| **Moon**   | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/Images/moon_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/Images/moon_test.png" alt="Learning Curves" width="350"> |
+| **Blob**   | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/blob_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/blob_test.png" alt="Learning Curves" width="350"> |
+| **Circle** | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/circle_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/circle_test.png" alt="Learning Curves" width="350"> |
+| **Moon**   | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/moon_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/moon_test.png" alt="Learning Curves" width="350"> |
