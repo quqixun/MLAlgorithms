@@ -2,7 +2,7 @@
 # Helper functions for Class of "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/04/10
-# Modify on: 2018/04/10
+# Modify on: 2018/04/11
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -46,7 +46,7 @@ def split_dataset(X, y, test_size=0.2, random_state=None):
         -------
 
         - X : float array in shape [n_samples, n_features],
-              features arrya of all input samples.
+              features array of all input samples.
         - y : float list in shape [n_samples, ], labels list
               of all input samples.
         - test_size : float, default is 0.2, the proportion

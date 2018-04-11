@@ -2,7 +2,7 @@
 # Helper functions for Class of "SVM".
 # Author: Qixun Qu
 # Create on: 2018/04/02
-# Modify on: 2018/04/10
+# Modify on: 2018/04/11
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -44,7 +44,7 @@ def generate_dataset(style="blob", n_samples=500, random_state=None):
         Generate dataset to test SVM.
         You may get three kinds of dataset through this function. Look at
         http://scikit-learn.org/stable/datasets/index.html#sample-generators
-        for mare infomation.
+        for more infomation.
 
         Inputs:
         -------
@@ -52,7 +52,7 @@ def generate_dataset(style="blob", n_samples=500, random_state=None):
         - style : string, default is "blob", select one from
                   ["blob", "circle", "moon"] to generate different dataset.
         - n_samples : int, default is 500, the number of samples.
-        - random_state: int or None, default is NOne,
+        - random_state: int or None, default is None,
                         the seed for reproducing dataset.
 
         Outputs:
@@ -92,7 +92,7 @@ def split_dataset(X, y, test_size=0.2, random_state=None):
         -------
 
         - X : float array in shape [n_samples, n_features],
-              features arrya of all input samples.
+              features array of all input samples.
         - y : float list in shape [n_samples, ], labels list
               of all input samples.
         - test_size : float, default is 0.2, the proportion
@@ -138,7 +138,8 @@ def scale_dataset(X_train, X_test=None):
         - X_train : float array of training samples
                     in shape [n_train_samples, n_features].
         - X_test : optional, float array of testing samples
-                   in shape [n_test_samples, n_features].
+                   in shape [n_test_samples, n_features],
+                   default is None.
 
         Outputs:
         --------
