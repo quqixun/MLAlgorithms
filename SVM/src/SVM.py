@@ -2,7 +2,7 @@
 # Class of "SVC".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/04/09
+# Modify on: 2018/04/11
 
 # References:
 # [1] Sequential Minimal Optimization:
@@ -312,6 +312,8 @@ class SVC(object):
             else:
                 a2_new = a2_old
 
+        # If the update of alpha 2 is smaller than
+        # the torlerance, stop updating other variables
         if (np.abs(a2_new - a2_old) <
            self.epsilon * (a2_new + a2_old + self.epsilon)):
             return 0
@@ -450,6 +452,12 @@ class SVC(object):
             - sign : boolean, default is True. If True, reurn the
                      classification result; else, return the original
                      prediction.
+
+            Output:
+            -------
+
+            - pred : original prediction if sign is False;
+                     else, return the binary classification result.
 
         '''
 
