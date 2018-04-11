@@ -83,4 +83,4 @@ print("Accuracy of test set:", accuracy(y_pred, y_test))
 # Accuracy could reach 0.9825.
 
 # Plot learning curves
-abt.plot_curve()
+abt.plot_curves()

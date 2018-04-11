@@ -36,14 +36,14 @@ class AdaBoostTree(object):
                  verbose=True, vb_num=10):
         '''__INIT__
 
-            Initialization of the object to indicate the
-            number of iteration and the classifier.
+            Initialization of the instance to indicate the
+            number of iteration and the basic classifier.
 
             Inputs:
             -------
 
             - M : int, the number of iteration.
-            - clf : object of sklearn.tree, the classifier.
+            - clf : instance of sklearn.tree, the basic classifier.
             - verbose : boolean, the symbol to determine whether
                         show logs while training process.
             - vb_num: int, the interval of iteration to display logs.
@@ -113,7 +113,7 @@ class AdaBoostTree(object):
         weights = np.ones(train_num) / train_num
 
         # Initialize arrays to store and update predictions
-        # of training set and test set in each iteration
+        # of training set in each iteration
         ws_pred_train = np.zeros(train_num)
 
         # If test set is given
@@ -224,7 +224,7 @@ class AdaBoostTree(object):
         # Compute and return the binary prediction
         return np.sign(pred)
 
-    def plot_curve(self):
+    def plot_curves(self):
         '''PLOT_CURVES
 
             Plot error rates of training set

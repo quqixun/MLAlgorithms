@@ -2,7 +2,7 @@
 # The Script to Test Class "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/04/10
+# Modify on: 2018/04/11
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -56,7 +56,7 @@ clf = DecisionTreeClassifier(criterion="entropy",
 # Set the number of iterations
 M = 200
 
-# Initialize the object
+# Initialize the instance
 abt = AdaBoostTree(M, clf, verbose=True, vb_num=10)
 
 # Fit training data
@@ -70,4 +70,4 @@ print("Accuracy of test set:", accuracy(y_pred, y_test))
 # Accuracy could reach 0.9370.
 
 # Plot learning curves
-abt.plot_curve()
+abt.plot_curves()
