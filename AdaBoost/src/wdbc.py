@@ -59,7 +59,7 @@ X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 # Step 2
 # Generate the basic classifier.
-clf = DecisionTreeClassifier(criterion="entropy",
+clf = DecisionTreeClassifier(criterion="gini",
                              max_depth=3,
                              random_state=random_state)
 
@@ -67,7 +67,7 @@ clf = DecisionTreeClassifier(criterion="entropy",
 # Step 3
 # Test class "AdaBoostTree"
 # Set the number of iterations
-M = 200
+M = 50
 
 # Initialize the object
 abt = AdaBoostTree(M, clf, verbose=True, vb_num=10)

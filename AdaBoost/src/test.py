@@ -2,7 +2,7 @@
 # The Script to Test Class "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/03/13
-# Modify on: 2018/04/11
+# Modify on: 2018/04/13
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",

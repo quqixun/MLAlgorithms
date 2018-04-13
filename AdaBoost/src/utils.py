@@ -2,7 +2,7 @@
 # Helper functions for Class of "AdaBoostTree".
 # Author: Qixun Qu
 # Create on: 2018/04/10
-# Modify on: 2018/04/11
+# Modify on: 2018/04/13
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -67,15 +67,11 @@ def split_dataset(X, y, test_size=0.2, random_state=None):
 
     '''
 
-    # Concatenate features and labels to one array
-    data = np.concatenate([X, np.reshape(y, (-1, 1))], axis=1)
     # Split dataset into train set and test set
-    train, test = train_test_split(data, test_size=0.2,
-                                   random_state=random_state)
+    X_train, X_test, y_train, y_test = \
+        train_test_split(X, y, stratify=y, test_size=0.2,
+                         random_state=random_state)
 
-    # Split features array and labels list
-    X_train, y_train = train[:, :-1], train[:, -1]
-    X_test, y_test = test[:, :-1], test[:, -1]
     return X_train, y_train, X_test, y_test
 
 
