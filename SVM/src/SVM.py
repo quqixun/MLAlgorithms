@@ -2,7 +2,7 @@
 # Class of "SVC".
 # Author: Qixun Qu
 # Create on: 2018/03/23
-# Modify on: 2018/04/11
+# Modify on: 2018/04/13
 
 # References:
 # [1] Sequential Minimal Optimization:
@@ -409,6 +409,8 @@ class SVC(object):
                         in shape [n_train_samples, ].
 
         '''
+
+        print("Training SVM classifier ...")
 
         # Initialize instance's variablers
         self._initialize(X_train, y_train)
