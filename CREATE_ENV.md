@@ -1,6 +1,11 @@
 ## 0. Create Virtual Environment
 
-- [Download Anaconda](https://www.anaconda.com/download/) and [install](https://conda.io/docs/user-guide/install/index.html#regular-installation) it in you computer.
+- [Download Anaconda](https://www.anaconda.com/download/) and [install](https://conda.io/docs/user-guide/install/index.html#regular-installation) it in you computer.  
+NOTE: In Windows, you need to add a new the folder path into the system PATH.  
+This folder contains all excutive files.
+```
+/Anaconda_folder_path/Scripts
+```
 - Download this repo and extract it.
 - In terminal (or Anaconda prompt if you use Windows), change the working directory to the repo folder.
 ```
