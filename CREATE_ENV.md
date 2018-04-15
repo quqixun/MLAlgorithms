@@ -28,12 +28,17 @@ befor you run the test of this repo.
 source activate algo
 ```
 
-**0.6** Quit the environment in **Linux** and **macOS** (remove "source" if you use Windows)..
+**0.6** Quit the environment in **Linux** and **macOS**  (remove "source" if you use Windows).
 ```
 source deactivate
 ```
 
-**0.7** Create environment in **Windows** if the above command (in **0.4**) did not work.
+**0.7** Back to the root environment in **Windows**.
+```
+activate base
+```
+
+**0.8** Create environment in **Windows** if the above command (in **0.4**) did not work.
 ```
 conda create --name algo python=3
 pip install -r requirement.txt
