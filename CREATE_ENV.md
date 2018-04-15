@@ -17,7 +17,7 @@ cd $<repo_folder_path>
 ```
 
 **0.4** Create a virtual environment named "algo" and install all required libraries.  
-**NOTE: This may not work in Windows.**
+**NOTE: This may not work in Windows. See 0.8.**
 ```
 conda env create -f environment.yml
 ```
