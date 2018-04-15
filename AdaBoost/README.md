@@ -31,7 +31,10 @@ Except ID and label, the other 30 features extracted from images of cell nuclei 
 See [UCI Data Repo](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)) for more information, dataset can be downloaded [here (select wdbc.data)](https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/).
 
 ## Performance
-
+Change working directory to this folder.
+```
+cd AdaBoost/src
+```
 Run the test script in command line.
 ```
 python test.py
