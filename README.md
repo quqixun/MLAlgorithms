@@ -13,7 +13,8 @@ cd $<repo_folder_path>
 ```
 conda env create -f environment.yml
 ```
-- Activate the environment in Linux and macOS (remove "source" if you use Windows).
+- Activate the environment in Linux and macOS (remove "source" if you use Windows)  
+befor you run the test of this repo.
 ```
 source activate algo
 ```  
