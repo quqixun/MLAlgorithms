@@ -1,0 +1,14 @@
+name: algo
+
+channels:
+  - defaults
+
+dependencies:
+  - python=3.6
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - pip:
+    - scikit-learn
+    - tqdm
