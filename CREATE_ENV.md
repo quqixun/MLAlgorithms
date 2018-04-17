@@ -22,13 +22,13 @@ cd $<repo_folder_path>
 conda env create -f environment.yml
 ```
 
-**0.5** Activate the environment in **Linux** and **macOS** (remove "source" if you use Windows)  
+**0.5** Activate the environment in **Linux** and **macOS** (remove "source" if you use **Windows**)  
 befor you run the test of this repo.
 ```
 source activate algo
 ```
 
-**0.6** Quit the environment in **Linux** and **macOS**  (remove "source" if you use Windows).
+**0.6** Quit the environment in **Linux** and **macOS**  (remove "source" if you use **Windows**).
 ```
 source deactivate
 ```
