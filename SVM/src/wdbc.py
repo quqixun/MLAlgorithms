@@ -45,7 +45,8 @@ X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
 # Nomalize the data
 X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
-# Create a clissifier using RBF kernel
+# Create a clissifier
+# You can change paramters
 svc = SVC(C=1,
           kernel="rbf", degree=3,
           coef0=1.0, gamma=1.0,

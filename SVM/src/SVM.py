@@ -257,6 +257,9 @@ class SVC(object):
             Ouput:
             ------
 
+            - return 0 if faild to update
+            - return 1 if sucessfully update
+
         '''
 
         if i1 == i2:
@@ -357,6 +360,9 @@ class SVC(object):
 
             Output:
             -------
+
+            - return 0 if faild to update
+            - return 1 if sucessfully update
 
         '''
 
