@@ -48,4 +48,5 @@ Run test on WDBC dataset.
 ```
 python wdbc.py
 ```
+<img src="https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/images/wdbc_learning_curves.png" alt="WDBC Learning Curves" width="500">
 The accuracy of test set can reach **0.9825**.
