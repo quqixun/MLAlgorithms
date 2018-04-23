@@ -3,7 +3,9 @@ Implementations of Conventional Machine Learning Algorithms.
 
 ## 0. Create Virtual Environment
 
-[LINK of Instructions](https://github.com/quqixun/MLAlgorithms/blob/master/CREATE_ENV.md)
+[LINK of Instructions](https://github.com/quqixun/MLAlgorithms/blob/master/CREATE_ENV.md)  
+**Optional**. If you have installed packages (see requirement.txt),  
+you can skip this step as you like.
 
 ## 1. AdaBoost
 
