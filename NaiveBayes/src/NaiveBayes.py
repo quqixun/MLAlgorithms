@@ -2,7 +2,7 @@
 # Class of "NaiveBayes".
 # Author: Qixun Qu
 # Create on: 2018/04/23
-# Modify on: 2018/04/23
+# Modify on: 2018/04/24
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -53,13 +53,16 @@ class NaiveBayes(object):
         '''
 
         self.N, self.F = X.shape
-        self.labels = list(set(y))
+        self.labels = set(y)
+        # self.features = [set(f) for f in map(list, zip(*X))]
 
-        self.prior_probs = []
-        self.cond_probs = []
-        self.post_probs = []
+        self.prior_probs = {}
+        self.cond_probs = {}
+        self.post_probs = {}
 
         self.cont_feat_idx = cont_feat_idx
+
+        # print(self.N, self.F, self.labels)
 
         return
 
@@ -68,9 +71,11 @@ class NaiveBayes(object):
         '''
 
         for label in self.labels:
-            prob = (len(np.where(y == label)[0]) + self.lb) \
-                   (self.N + len(self.labels) * self.lb)
-            self.prior_probs.append(prob)
+            prob = ((len(np.where(y == label)[0]) + self.lb) /
+                    (self.N + len(self.labels) * self.lb))
+            self.prior_probs[label] = prob
+
+        # print(self.prior_probs)
 
         return
 
@@ -78,7 +83,13 @@ class NaiveBayes(object):
         '''_COMPUTE_COND_PROBS
         '''
 
-        
+        self.features = {}
+
+        return
+
+    def _compute_post_probs(self, X):
+        '''_COMPUTE_POST_PROBS
+        '''
 
         return
 
@@ -87,5 +98,15 @@ class NaiveBayes(object):
         '''
 
         self._initialize(X, y, cont_feat_idx)
+        self._compute_prior_probs(y)
+        self._compute_cond_probs(X, y)
+
+        return
+
+    def predict(self, X):
+        '''PREDICT
+        '''
+
+        self._compute_post_probs(X)
 
         return
