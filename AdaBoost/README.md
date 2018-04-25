@@ -17,7 +17,7 @@ The code implements an [improved version](https://link.springer.com/content/pdf/
 
 According to the document of [scikit-learn](http://scikit-learn.org/stable/modules/generated/sklearn.datasets.make_hastie_10_2.html), data used for binary classification  
 is generated as [Hastie et al. 2009, Example 10.2 (page 337)](https://web.stanford.edu/~hastie/Papers/ESLII.pdf).  
-In this case, 12000 samples are generated.  
+In this case, 10000 samples are generated.  
 Each sample has ten features which are standard independent Gaussian  
 and the label y is defined as:
 
