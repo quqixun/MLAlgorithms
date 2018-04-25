@@ -38,6 +38,9 @@ mushroom = pd.read_csv(mushroom_path, header=None)
 
 # Obtain features and labels
 X = mushroom.iloc[:, 1:].values
+# Remove the feature which has
+# too much missing values.
+X = np.delete(X, 10, axis=1)
 y = mushroom.iloc[:, 0].values
 
 # Split dataset
