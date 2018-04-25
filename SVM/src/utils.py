@@ -166,7 +166,7 @@ def accuracy(y_pred, y_true):
         Inputs:
         -------
 
-        - y_pred : Labels predicted by the SVM in shape [n_samples, ].
+        - y_pred : Labels predicted by the model in shape [n_samples, ].
         - y_true : Real labels of dataset in shpe [n_samples, ].
 
         Output:
