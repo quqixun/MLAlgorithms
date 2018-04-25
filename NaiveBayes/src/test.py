@@ -2,7 +2,7 @@
 # Test Script for Class of "NaiveBayes".
 # Author: Qixun Qu
 # Create on: 2018/04/24
-# Modify on: 2018/04/24
+# Modify on: 2018/04/25
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -21,22 +21,33 @@ from __future__ import division
 from __future__ import print_function
 
 
-import os
-import pandas as pd
+from utils import *
 from NaiveBayes import *
+from sklearn.datasets import make_hastie_10_2
 
 
-PARENT_DIR = os.path.dirname(os.path.dirname(os.getcwd()))
-DATA_DIR = os.path.join(PARENT_DIR, "Data")
-
-mushroom_path = os.path.join(DATA_DIR, "Mushroom", "mushroom.csv")
-mushroom = pd.read_csv(mushroom_path, header=None)
-
-X = mushroom.iloc[:, 1:].values
-y = mushroom.iloc[:, 0].values
-# print(type(X))
-# print(X)
+# Basic settings
+random_state = 9527
+n_samples = 10000
+test_size = 0.2
 
 
-nb = NaiveBayes(lb=1)
-nb.fit(X, y)
+# Generate Dataset for training and testing
+# Obtain all samples
+X, y = make_hastie_10_2(n_samples=n_samples,
+                        random_state=random_state)
+# Split dataset
+X_train, y_train, X_test, y_test = split_dataset(X, y, test_size,
+                                                 random_state)
+# Normalize dataset
+X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
+
+
+# Train Gaussian Naive Bayes Classifier
+nb = NaiveBayes()
+nb.fit(X_train_scaled, y_train, cont_feat_idx="all")
+
+# Predict test set and evaluate results
+y_pred = nb.predict(X_test_scaled)
+print("Accuracy of test set:", accuracy(y_pred, y_test))
+# Accuracy can reach 0.9765.
