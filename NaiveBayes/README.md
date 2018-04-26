@@ -6,6 +6,10 @@ It should work in Linux and macOS if required libraries are installed.
 
 # Algorithms
 
+The code implements multinomial Naive Bayes for discrete features,  
+and Gaussian Naive Bayes for continuous features which are in  
+concordance with the Gaussian distrabution.
+
 ## Multinomial Naive Bayes
 
 <img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/multinomialNB.png" alt="Algorithms" width="500">
@@ -18,7 +22,7 @@ It should work in Linux and macOS if required libraries are installed.
 
 In this implementation, both discrete features and continuous features  
 can be handled. You have to input a list that contains indices of  
-features which are continuous in training samples.
+features which are continuous when initialize the classifer.
 
 # Dataset
 
