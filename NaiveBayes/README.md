@@ -14,6 +14,12 @@ It should work in Linux and macOS if required libraries are installed.
 
 <img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/gaussianNB.png" alt="Algorithms" width="550">
 
+## NOTE
+
+In this implementation, both discrete features and continuous features  
+can be handled. You have to input a list that contains indices of  
+features which are continuous in training samples.
+
 # Dataset
 
 ### Simulation Dataset
