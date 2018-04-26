@@ -8,11 +8,11 @@ It should work in Linux and macOS if required libraries are installed.
 
 ## Multinomial Naive Bayes
 
-<img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/multinomialNB.png" alt="Algorithms" width="550">
+<img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/multinomialNB.png" alt="Algorithms" width="500">
 
 ## Gaussian Naive Bayes
 
-<img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/gaussianNB.png" alt="Algorithms" width="550">
+<img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/gaussianNB.png" alt="Algorithms" width="500">
 
 ## NOTE
 
