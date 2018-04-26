@@ -14,3 +14,7 @@ you can skip this step as you like.
 ## 2. Support Vector Machine
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/SVM)
+
+## 3. Naive Bayes
+
+[LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/NaiveBayes)
