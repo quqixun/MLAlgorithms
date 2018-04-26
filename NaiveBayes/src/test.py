@@ -44,7 +44,7 @@ X_train_scaled, X_test_scaled = scale_dataset(X_train, X_test)
 
 
 # Train Gaussian Naive Bayes Classifier
-nb = NaiveBayes()
+nb = NaiveBayes(alpha=1)
 nb.fit(X_train_scaled, y_train, cont_feat_idx="all")
 
 # Predict test set and evaluate results
