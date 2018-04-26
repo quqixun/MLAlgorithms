@@ -189,11 +189,11 @@ class NaiveBayes(object):
 
         '''
 
-        for i in range(self.F):
+        for j in range(self.F):
             # Extract one feature over all samples
-            Xf = X[:, i]
+            Xf = X[:, j]
             feat_dict = {}
-            if i not in self.cont_feat_idx:
+            if j not in self.cont_feat_idx:
                 # The feature is discrete
                 # Get unique groups
                 feat_set = set(Xf)
@@ -210,12 +210,12 @@ class NaiveBayes(object):
                 for l in self.labels:
                     l_dict = {}
                     # Estimate parameters of Gaussian distribution
-                    # from training samples
+                    # from training samples as Equation 5 and 6
                     l_dict["mu"] = np.mean(Xf[y == l])
                     l_dict["sigma"] = np.std(Xf[y == l])
                     feat_dict[l] = l_dict
 
-            self.cond_probs[i] = feat_dict
+            self.cond_probs[j] = feat_dict
 
         return
 
@@ -253,7 +253,7 @@ class NaiveBayes(object):
             # For each sample in test set
             i_dict = {}
             for l in self.labels:
-                post_prob = 1
+                post_prob = self.prior_probs[l]
                 for j in range(self.F):
                     # For each feature of one sample
                     if j not in self.cont_feat_idx:
@@ -263,7 +263,7 @@ class NaiveBayes(object):
                     else:
                         mu = self.cond_probs[j][l]["mu"]
                         sigma = self.cond_probs[j][l]["sigma"]
-                        # Compute as Equation 5
+                        # Compute as Equation 7
                         # if the feature is continuous
                         post_prob *= (np.exp(-(X[i, j] - mu) ** 2 / (2 * sigma ** 2)) /
                                       (np.sqrt(2 * np.pi * sigma ** 2)))
@@ -327,7 +327,7 @@ class NaiveBayes(object):
 
         # Get the calssification result of each sample
         # by finding the maximum value among post-probs
-        # of one sample
+        # of one sample as Equation 4
         result = []
         for i in self.post_probs:
             preds = list(self.post_probs[i].values())
