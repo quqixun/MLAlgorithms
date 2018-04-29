@@ -2,7 +2,7 @@
 # Class of "kNN".
 # Author: Qixun Qu
 # Create on: 2018/04/26
-# Modify on: 2018/04/28
+# Modify on: 2018/04/29
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -31,13 +31,16 @@ class Node(object):
         self.data = data
         self.left = left
         self.right = right
+        self.parent = None
+        self._set_parent()
         return
 
-    def get_left(self):
-        return self.left
-
-    def get_right(self):
-        return self.right
+    def _set_parent(self):
+        if self.left is not None:
+            self.left.parent = self
+        if self.right is not None:
+            self.right.parent = self
+        return
 
 
 class kNN(object):
@@ -47,7 +50,7 @@ class kNN(object):
         '''
 
         self.k = k
-        self.kd_tree = None
+        self.kdtree_root = None
 
         self.X = None
         self.y = None
@@ -98,7 +101,7 @@ class kNN(object):
         '''
 
         self._initialize(X, y)
-        self.kdtree = self._build_kd_tree()
+        self.kdtree_root = self._build_kd_tree()
 
         return
 
@@ -110,13 +113,10 @@ class kNN(object):
 
 
 def main():
-    """Example usage"""
     X = np.array([(2, 3), (5, 4), (9, 6), (4, 7), (8, 1), (7, 2)])
     knn = kNN()
     knn.fit(X, None)
-    print(knn.kdtree.data)
-    # tree = kdtree(point_list)
-    # print(tree)
+    print(knn.kdtree_root.right.left.parent.data)
 
 
 if __name__ == '__main__':
