@@ -2,7 +2,7 @@
 # Helper functions for Class of "kNN".
 # Author: Qixun Qu
 # Create on: 2018/04/30
-# Modify on: 2018/04/30
+# Modify on: 2018/05/04
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -21,6 +21,7 @@ from __future__ import print_function
 
 import os
 import numpy as np
+import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
@@ -130,3 +131,42 @@ def accuracy(y_pred, y_true):
     '''
 
     return np.mean((y_pred == y_true) * 1.0)
+
+
+def plot_curve(k, accs, step=None):
+    '''PLOT_CURVE
+
+        Plot accuracies over different k
+        by a given step.
+
+        Inputs:
+        -------
+
+        - k : int list consists of the number of
+              nearest neighbors.
+        - accs : float list, accuracies obtained
+                 by applying different k.
+        - step : int, the interval of x-axis.
+
+    '''
+
+    # Set labels for a-axis
+    xt = []
+    if step is None:
+        xt = k
+    else:
+        xt = [x for x in k if x % step == 0]
+        if k[0] not in xt:
+            xt.insert(0, k[0])
+
+    plt.figure()
+    plt.plot(k, accs, "r.--", markersize=10)
+    plt.xticks(xt, fontsize=12)
+    plt.yticks(fontsize=12)
+    plt.xlabel("k-Nearest Neighbors", fontsize=14)
+    plt.ylabel("Accuracy", fontsize=14)
+    plt.grid(alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+    return
