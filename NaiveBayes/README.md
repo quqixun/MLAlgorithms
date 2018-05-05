@@ -53,14 +53,14 @@ And make sure that you have activated environment "algo".
 cd NaiveBayes/src
 ```
 
-Run the test script in command line.
+Run the test script on **simulation dataset**.
 ```
 python test.py
 ```
 
 Classification accuracy of test set can reach **0.9765**.  
 
-Run test on **Mushroom** dataset.
+Run test on **Mushroom dataset**.
 ```
 python mushroom.py
 ```
