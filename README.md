@@ -18,3 +18,7 @@ you can skip this step as you like.
 ## 3. Naive Bayes
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/NaiveBayes)
+
+## 4. k-Nearest Neighbors
+
+[LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/kNN)
