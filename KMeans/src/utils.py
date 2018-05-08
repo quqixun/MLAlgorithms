@@ -2,7 +2,7 @@
 # Helper functions for Class of "KMeans".
 # Author: Qixun Qu
 # Create on: 2018/05/06
-# Modify on: 2018/05/07
+# Modify on: 2018/05/08
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -18,7 +18,6 @@
 
 
 import os
-from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
 
@@ -70,39 +69,3 @@ def split_dataset(X, y, test_size=0.2, random_state=None):
                          random_state=random_state)
 
     return X_train, y_train, X_test, y_test
-
-
-def scale_dataset(X_train, X_test=None):
-    '''SCALE_DATASET
-
-        Normalize each feature of the dataset
-        by subtracting feature's mean
-        and deviding features's standard deviation (std).
-
-        Inputs:
-        -------
-
-        - X_train : float array of training samples
-                    in shape [n_train_samples, n_features].
-        - X_test : optional, float array of testing samples
-                   in shape [n_test_samples, n_features].
-
-        Outputs:
-        --------
-
-        - X_train_scaled : normalized training samples.
-        - X_test_scaled : normalized testing samples
-                          if X_test is not none.
-
-    '''
-
-    # Normalize train set
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    if X_test is None:
-        return X_train_scaled
-    else:
-        # Normalize test set by
-        # the mean and std values of train set
-        X_test_scaled = scaler.transform(X_test)
-        return X_train_scaled, X_test_scaled
