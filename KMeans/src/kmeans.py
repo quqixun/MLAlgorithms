@@ -2,7 +2,7 @@
 # Class of "KMeans".
 # Author: Qixun Qu
 # Create on: 2018/05/05
-# Modify on: 2018/05/07
+# Modify on: 2018/05/08
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -41,11 +41,11 @@ class KMeans(object):
         self.random_state = random_state
 
         self.X = None
-        self.n_features = None
-        self.init_centers = None
+
+        self.cluster = None
         self.centers = None
         self.old_centers = None
-        self.cluster = None
+        self.init_centers = None
 
         return
 
@@ -83,11 +83,11 @@ class KMeans(object):
         '''
 
         self.X = X
-        self.n_features = X.shape[1]
+
+        self.clusters = np.array([-1] * len(X))
         self.init_centers = self._init_centers(X)
         self.centers = np.copy(self.init_centers)
         self.old_centers = np.copy(self.centers)
-        self.clusters = np.array([-1] * len(X))
 
         return
 
@@ -141,27 +141,37 @@ class KMeans(object):
 
         return clusters
 
-    def plot_clusters(self, X=None, clusters=None):
+    def plot_clusters(self, X=None, clusters=None,
+                      axis_labels=None):
         '''PLOT_CLUSTERS
-        '''
 
-        if (self.n_features != 2) and (self.n_features != 3):
-            print("Only plot points in 2D or 3D.")
-            return
+            Plot clustering result.
+
+        '''
 
         if X is None and clusters is None:
             X, clusters = self.X, self.clusters
 
+        n_features = X.shape[1]
+        if (n_features != 2) and (n_features != 3):
+            print("Only plot points in 2D or 3D.")
+            return
+
+        if axis_labels is None:
+            axis_labels = ["Feature 1", "Feature 2"]
+            if n_features == 3:
+                axis_labels.append("Feature 3")
+
         fig = plt.figure(figsize=(12, 5))
 
-        if self.n_features == 2:
+        if n_features == 2:
             plt.subplot(121)
             plt.title("Initialization", fontsize=14)
             plt.plot(X[:, 0], X[:, 1], ".", ms=10, alpha=0.5)
             plt.plot(self.init_centers[:, 0], self.init_centers[:, 1], "r*",
                      ms=10, markeredgewidth=1, markeredgecolor="k")
-            plt.xlabel("Feature 1", fontsize=14)
-            plt.ylabel("Feature 2", fontsize=14)
+            plt.xlabel(axis_labels[0], fontsize=14)
+            plt.ylabel(axis_labels[1], fontsize=14)
             plt.xticks(fontsize=12)
             plt.yticks(fontsize=12)
             plt.subplot(122)
@@ -172,19 +182,19 @@ class KMeans(object):
                 plt.plot(X[idx, 0], X[idx, 1], ".", ms=10, alpha=0.5, color=c)
                 plt.plot(self.centers[k, 0], self.centers[k, 1], "*", ms=10,
                          color=c, markeredgewidth=1, markeredgecolor="k")
-            plt.xlabel("Feature 1", fontsize=14)
-            plt.ylabel("Feature 2", fontsize=14)
+            plt.xlabel(axis_labels[0], fontsize=14)
+            plt.ylabel(axis_labels[1], fontsize=14)
             plt.xticks(fontsize=12)
             plt.yticks(fontsize=12)
-        else:  # self.n_features = 3
+        else:  # n_features = 3
             ax1 = fig.add_subplot(121, projection='3d')
             plt.title("Initialization", fontsize=14)
             ax1.scatter(X[:, 0], X[:, 1], X[:, 2], s=10, alpha=0.5)
             ax1.scatter(self.init_centers[:, 0], self.init_centers[:, 1], self.init_centers[:, 2],
                         marker="*", c="r", s=100, edgecolor="k")
-            ax1.set_xlabel("Feature 1", fontsize=14)
-            ax1.set_ylabel("Feature 2", fontsize=14)
-            ax1.set_zlabel("Feature 3", fontsize=14)
+            ax1.set_xlabel(axis_labels[0], fontsize=14)
+            ax1.set_ylabel(axis_labels[1], fontsize=14)
+            ax1.set_zlabel(axis_labels[2], fontsize=14)
             ax2 = fig.add_subplot(122, projection='3d')
             plt.title("Clustering Result", fontsize=14)
             for k in range(self.k):
@@ -193,9 +203,11 @@ class KMeans(object):
                 ax2.scatter(X[idx, 0], X[idx, 1], X[idx, 2], c=c, s=10, alpha=0.5)
                 ax2.scatter(self.centers[k, 0], self.centers[k, 1], self.centers[k, 2],
                             marker="*", c=c, s=100, edgecolor="k")
-            ax2.set_xlabel("Feature 1", fontsize=14)
-            ax2.set_ylabel("Feature 2", fontsize=14)
-            ax2.set_zlabel("Feature 3", fontsize=14)
+            ax2.set_xlabel(axis_labels[0], fontsize=14)
+            ax2.set_ylabel(axis_labels[1], fontsize=14)
+            ax2.set_zlabel(axis_labels[2], fontsize=14)
 
         plt.tight_layout()
         plt.show()
+
+        return
