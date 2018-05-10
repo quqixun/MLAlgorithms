@@ -23,6 +23,6 @@ you can skip this step as you like.
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/kNN)
 
-## 4. k-Menas
+## 5. K-Menas
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/KMeans)
