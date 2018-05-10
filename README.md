@@ -22,3 +22,7 @@ you can skip this step as you like.
 ## 4. k-Nearest Neighbors
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/kNN)
+
+## 4. k-Menas
+
+[LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/KMeans)
