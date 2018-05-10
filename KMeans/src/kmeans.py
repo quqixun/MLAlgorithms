@@ -2,7 +2,7 @@
 # Class of "KMeans".
 # Author: Qixun Qu
 # Create on: 2018/05/05
-# Modify on: 2018/05/08
+# Modify on: 2018/05/10
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -29,23 +29,39 @@ from mpl_toolkits.mplot3d import Axes3D
 
 class KMeans(object):
 
-    def __init__(self, k=None, init="kmmeans++", tol=1e-4,
+    def __init__(self, k, init="kmmeans++", tol=1e-4,
                  max_iters=1000, random_state=None):
         '''__INIT__
+
+            Initialize an instance to do KMeans Cluster.
+
+            Inputs:
+            -------
+
+            - k : int, the number of clusters.
+            - init : string, one of ["random", "kmeans++"],
+                     the method to initialize centers before
+                     the first iteration, default is "kmeans++".
+            - tol : float, the threshold to stop iteration.
+                    If the distance between new centers and old
+                    centers is smaller than this threshold, stop
+                    running. Default is 1e-4.
+            - max_iters : int, the maximum number of iterations.
+            - random_state : int, seed for reproducing result.
+
         '''
 
-        self.k = k
-        self.init = init
-        self.tol = tol
-        self.max_iters = max_iters
-        self.random_state = random_state
+        self.k = k                        # the number of clusters
+        self.init = init                  # initialization method
+        self.tol = tol                    # threshold to stop
+        self.max_iters = max_iters        # maximum number of iterations
+        self.random_state = random_state  # seed for reproducing results
 
-        self.X = None
-
-        self.cluster = None
-        self.centers = None
-        self.old_centers = None
-        self.init_centers = None
+        self.X = None             # training data
+        self.cluster = None       # array of clusters
+        self.centers = None       # array of new centers
+        self.old_centers = None   # array of old centers in previous iteration
+        self.init_centers = None  # array of initial centers
 
         return
 
@@ -54,24 +70,50 @@ class KMeans(object):
 
             Initialize centers by two methods:
             -1- randomly select points from dataset;
-            -2- apply algorithm "kmeans++".
+            -2- apply algorithm "kmeans++", see
+                http://ilpubs.stanford.edu:8090/778/1/2006-13.pdf
+                for more information.
+
+            Input:
+            ------
+
+            - X : numpy array of training data in shape
+                  [n_samples, n_features].
+
+            Output:
+            -------
+
+            - initial centers in shape [self.k, n_features].
 
         '''
 
+        # Initialize
         centers = []
+
         if self.init == "random":
+            # Randomply select unique points as initial centers
             init_idx = np.random.choice(len(X), self.k,
                                         replace=False)
             centers = X[init_idx, :]
         elif self.init == "kmeans++":
+            # Apply kmeans++ to select initial centers
+            # The first center is randomly selected
             first_idx = np.random.choice(len(X), 1)[0]
             centers.append(X[first_idx, :])
+            # Select the other centers
             for i in range(1, self.k):
-                ds = np.array([min([np.linalg.norm((x - c))
+                # Compute the minimum distance between
+                # the sample and the nearest center
+                ds = np.array([min([np.linalg.norm(x - c) ** 2
                                     for c in centers])
                                for x in X])
+                # Convert to probability
                 probs = ds / np.sum(ds)
+                # Compute comulative sum of probabilities
+                # as weighted probabilitys
                 cum_probs = np.cumsum(probs)
+                # Choose one new data point at random as a
+                # new center, using the weighted probabilities
                 thresh = np.random.rand()
                 idx = np.where(cum_probs >= thresh)[0][0]
                 centers.append(X[idx, :])
@@ -83,7 +125,6 @@ class KMeans(object):
         '''
 
         self.X = X
-
         self.clusters = np.array([-1] * len(X))
         self.init_centers = self._init_centers(X)
         self.centers = np.copy(self.init_centers)
