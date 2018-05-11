@@ -4,9 +4,9 @@ This code implements **k-Nearest Neighbors** classifier by searching data in **k
 The code is tested under Python 3.6.5 in Windows 7. It should work in Linux and macOS  
 if required libraries are installed.
 
-# Algorithm
+## Algorithm
 
-# Dataset
+## Dataset
 
 ### Simulation Dataset
 
@@ -31,7 +31,7 @@ WDBC is an open dataset. It has 569 samples, and each sample has 32 attributes.
 Except ID and label, the other 30 features extracted from images of cell nuclei of breast mass.  
 See [UCI Data Repo](https://archive.ics.uci.edu/ml/datasets/Breast+Cancer+Wisconsin+(Diagnostic)) for more information, dataset can be downloaded [here (select wdbc.data)](https://archive.ics.uci.edu/ml/machine-learning-databases/breast-cancer-wisconsin/).
 
-# Performance
+## Performance
 
 Change working directory to this folder.  
 And make sure that you have activated environment "algo".
