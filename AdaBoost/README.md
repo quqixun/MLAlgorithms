@@ -36,6 +36,8 @@ And make sure that you have activated environment "algo".
 ```
 cd AdaBoost/src
 ```
+
+### Simulation Dataset
 Run the test script on **simulation dataset**.
 ```
 python test.py
@@ -45,6 +47,7 @@ The algorithm works well.
 
 <img src="https://github.com/quqixun/MLAlgorithms/blob/master/AdaBoost/images/learning_curves.png" alt="Learning Curves" width="500">
 
+### WDBC Dataset
 Run test on **WDBC dataset**.
 ```
 python wdbc.py

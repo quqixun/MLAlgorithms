@@ -28,6 +28,8 @@ And make sure that you have activated environment "algo".
 ```
 cd SVM/src
 ```
+
+### Simulation Dataset
 Run the test script on **simulation dataset**.
 ```
 python test.py
@@ -41,6 +43,7 @@ The algorithm works well.
 | **Circle** | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/circle_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/circle_test.png" alt="Learning Curves" width="350"> |
 | **Moon**   | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/moon_train.png" alt="Learning Curves" width="350"> | <img src="https://github.com/quqixun/MLAlgorithms/blob/master/SVM/images/moon_test.png" alt="Learning Curves" width="350"> |
 
+### WDBC Dataset
 Run the test on **WDBC dataset**.
 ```
 python wdbc.py

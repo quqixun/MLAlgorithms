@@ -53,6 +53,7 @@ And make sure that you have activated environment "algo".
 cd NaiveBayes/src
 ```
 
+### Simulation Dataset
 Run the test script on **simulation dataset**.
 ```
 python test.py
@@ -60,6 +61,7 @@ python test.py
 
 Classification accuracy of test set can reach **0.9765**.  
 
+### Mushroom Dataset
 Run test on **Mushroom dataset**.
 ```
 python mushroom.py

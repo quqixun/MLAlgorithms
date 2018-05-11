@@ -38,6 +38,8 @@ And make sure that you have activated environment "algo".
 ```
 cd kNN/src
 ```
+
+### Simulation Dataset
 Run the test script on **simulation dataset**.
 ```
 python test.py
@@ -45,7 +47,7 @@ python test.py
 Plot the curve of accuracies over different **k**. The accuracy can reach **0.9725**.  
 <img src="https://github.com/quqixun/MLAlgorithms/blob/master/kNN/images/test.png" alt="Test" width="500">
 
-
+### WDBC Dataset
 Run test on **WDBC dataset**.
 ```
 python wdbc.py
