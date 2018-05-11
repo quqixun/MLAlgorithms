@@ -6,6 +6,29 @@ It should work in Linux and macOS if required libraries are installed.
 
 ## Algorithm
 
+### Initialize
+
+Two methods are implemented to generate initial *k* cluster centers.
+
+- Randomly selected *k* data points as initial cluster centers.
+- Apply **kmeans++** to obtain *k* initial cluster centers.  
+Here are steps of *kmeans++* (the copy from [Wikipedia page](https://en.wikipedia.org/wiki/K-means%2B%2B)):  
+  1. Choose one center uniformly at random from among the data points.
+  2. For each data point x, compute *D(x)*, the distance between x and  
+  the nearest center that has already been chosen.
+  3. Choose one new data point at random as a new center, using a weighted  
+  probability distribution where a point x is chosen with probability proportional to *D(x)^2*.
+  4. Repeat Steps ii and iii until *k* centers have been chosen.
+
+### K-Means
+1. Choose *k* initial cluster centers.  
+2. For each data point, compute Euclidean distance to every center.  
+  The cluster of this point is the index where the minimum distance is.  
+3. Compute new cluster centers.  
+4. If cluster centers converged (the difference between new cluster centers  
+  and the cluster centers generated in previous iteration is smaller than a threshold),  
+  stop iteration; otherwise, repeat step **2** and step **3**.
+
 ## Dataset
 
 ### Simulation Dataset
