@@ -4,27 +4,27 @@ This code implements Naive Bayes classifier for discrete data as well as continu
 The code is tested under Python 3.6.5 in Windows 7.  
 It should work in Linux and macOS if required libraries are installed.
 
-# Algorithms
+## Algorithms
 
 The code implements multinomial Naive Bayes for discrete features,  
 and Gaussian Naive Bayes for continuous features which are in  
 concordance with the Gaussian distrabution.
 
-## Multinomial Naive Bayes
+### Multinomial Naive Bayes
 
 <img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/multinomialNB.png" alt="Algorithms" width="500">
 
-## Gaussian Naive Bayes
+### Gaussian Naive Bayes
 
 <img src="https://github.com/quqixun/MLAlgorithms/blob/master/NaiveBayes/images/gaussianNB.png" alt="Algorithms" width="500">
 
-## NOTE
+### NOTE
 
 In this implementation, both discrete features and continuous features  
 can be handled. You have to input a list that contains indices of  
 features which are continuous when initialize the classifer.
 
-# Dataset
+## Dataset
 
 ### Simulation Dataset
 
@@ -45,7 +45,7 @@ Each sample is classified based on whether it is toxic. 4208 samples are ediable
 3916 samples are poisonous. See [UCI Data Repo](http://archive.ics.uci.edu/ml/datasets/Mushroom) for more information,  
 dataset can be downloaded [here (select agaricus-lepiota.data)](http://archive.ics.uci.edu/ml/machine-learning-databases/mushroom/).
 
-# Performance
+## Performance
 
 Change working directory to this folder.  
 And make sure that you have activated environment "algo".
