@@ -7,6 +7,9 @@ Implementations of Conventional Machine Learning Algorithms.
 **Optional**. If you have installed packages (see requirement.txt),  
 you can skip this step as you like.
 
+[Tutorial for conda.](https://github.com/quqixun/MLAlgorithms/blob/master/Tutorial/Tutorial_for_conda.pdf)  
+[Tutorial for jupyter.](https://github.com/quqixun/MLAlgorithms/blob/master/Tutorial/Tutorial_for_jupyter.pdf)
+
 ## 1. AdaBoost
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/AdaBoost)
