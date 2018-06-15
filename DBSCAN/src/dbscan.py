@@ -93,6 +93,8 @@ class DBSCAN(object):
 
         '''
 
+        print("Runing DBSCAN ......")
+
         # Cluster counter
         C = 0
 
@@ -125,6 +127,7 @@ class DBSCAN(object):
                         N1 = N1 + N2
                 q += 1
 
+        print("Done")
         return
 
     def fit_predict(self, X):
