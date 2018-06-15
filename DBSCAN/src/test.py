@@ -20,27 +20,51 @@
 from __future__ import print_function
 
 
+from utils import *
 from dbscan import DBSCAN
-from sklearn.datasets import make_blobs
 
 
 # Basic settings
 random_state = 9527  # Seed
-n_samples = 750      # Number of samples
-centers = 3          # Number of clusters
-n_features = 2       # Number of features
+n_samples = 600     # Number of samples
+
+# Settings for blobs
+bcenters = 4          # Number of clusters
+bn_features = 2       # Number of features
+bcluster_std = 1.0      # standard deviation of the clusters
+
+# Settings for circles
+cnoise = 0.1          # standard deviation of Gaussian noise added to the data
+cfactor = 0.3         # scale factor between inner and outer circles
+
+# Setting for moons
+mnoise = 0.1          # standard deviation of Gaussian noise added to the data
 
 
-# Generate Dataset for training and testing.
-# Obtain all samples
-X, _ = make_blobs(n_samples=n_samples,
-                  centers=centers,
-                  n_features=n_features,
-                  cluster_std=0.1,
-                  random_state=random_state)
+# Blobs
+bX, _ = generate_dataset("blobs", n_samples=n_samples,
+                         centers=bcenters, n_features=bn_features,
+                         cluster_std=bcluster_std, random_state=random_state)
+
+bdbs = DBSCAN(epsilon=1.0, min_samples=5, random_state=random_state)
+bdbs.fit_predict(bX)
+plot_clusters(bdbs)
 
 
-# Initialize and fit
-dbs = DBSCAN(epsilon=0.1, min_samples=5,
-             random_state=random_state)
-dbs.fit_predict(X)
+# Circles
+cX, _ = generate_dataset("circles", n_samples=n_samples,
+                         noise=cnoise, factor=cfactor,
+                         random_state=random_state)
+
+cdbs = DBSCAN(epsilon=0.2, min_samples=5, random_state=random_state)
+cdbs.fit_predict(cX)
+plot_clusters(cdbs)
+
+
+# Moons
+mX, _ = generate_dataset("moons", n_samples=n_samples,
+                         noise=mnoise, random_state=random_state)
+
+mdbs = DBSCAN(epsilon=0.15, min_samples=5, random_state=random_state)
+mdbs.fit_predict(mX)
+plot_clusters(mdbs)
