@@ -2,7 +2,7 @@
 # Helper functions for Class of "KMeans".
 # Author: Qixun Qu
 # Create on: 2018/06/13
-# Modify on: 2018/06/15
+# Modify on: 2018/06/16
 
 #     ,,,         ,,,
 #   ;"   ';     ;'   ",
@@ -107,19 +107,21 @@ def plot_clusters(clt):
 
     '''
 
+    # Only plot 2D image
     if clt.X.shape[1] != 2:
         print("Please set n_feaures to 2.")
         return
 
-    clt_max = max(clt.clusters) + 1
-
     plt.figure(figsize=(12, 5))
+    # Plot original data
     plt.subplot(121)
     plt.plot(clt.X[:, 0], clt.X[:, 1], ".")
     plt.title("Original", fontsize=14)
     plt.xlabel("Feature 1", fontsize=12)
     plt.ylabel("Feature 2", fontsize=12)
+    # Plot clustering results
     plt.subplot(122)
+    clt_max = max(clt.clusters) + 1
     for i in range(clt.X.shape[0]):
         plt.plot(clt.X[i, 0], clt.X[i, 1], ".",
                  color=cm.hsv((clt.clusters[i] + 1) / clt_max))
