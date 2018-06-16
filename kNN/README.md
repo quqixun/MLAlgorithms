@@ -1,10 +1,13 @@
 # k-Nearest Neighbors
 
-This code implements **k-Nearest Neighbors** classifier by searching data in **kd-tree**.  
+This code implements **k-Nearest Neighbors** classifier by searching data in **kD-tree**.  
 The code is tested under Python 3.6.5 in Windows 7. It should work in Linux and macOS  
 if required libraries are installed.
 
 ## Algorithm
+
+Detailed description of **k-nearest neighbors** can be found in [Wikipedia page](https://en.wikipedia.org/wiki/K-nearest_neighbors_algorithm).  
+The paper [Multidimensional Binary Search Trees Used for Associative Searching](http://delivery.acm.org/10.1145/370000/361007/p509-bentley.pdf?ip=129.16.80.135&id=361007&acc=ACTIVE%20SERVICE&key=74F7687761D7AE37%2E3C5D6C4574200C81%2E4D4702B0C3E38B35%2E4D4702B0C3E38B35&__acm__=1529185085_1e8668008ebb34ee05d78792813d3ccc) proposed kD-tree.
 
 ## Dataset
 
