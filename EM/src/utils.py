@@ -1,3 +1,22 @@
+# Conventional Machine Learning Algorithms
+# Helper functions for Class of "EM".
+# Author: Qixun Qu
+# Create on: 2018/06/20
+# Modify on: 2018/06/20
+
+#     ,,,         ,,,
+#   ;"   ';     ;'   ",
+#   ;  @.ss$$$$$$s.@  ;
+#   `s$$$$$$$$$$$$$$$'
+#   $$$$$$$$$$$$$$$$$$
+#  $$$$P""Y$$$Y""W$$$$$
+#  $$$$  p"$$$"q  $$$$$
+#  $$$$  .$$$$$.  $$$$'
+#   $$$DaU$$O$$DaU$$$'
+#    '$$$$'.^.'$$$$'
+#       '&$$$$$&'
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.patches import Ellipse
