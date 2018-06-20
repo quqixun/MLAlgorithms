@@ -1,5 +1,5 @@
 # Conventional Machine Learning Algorithms
-# The Script to Test Class "kNN".
+# The Script to Test Class "DBSCAN".
 # Author: Qixun Qu
 # Create on: 2018/06/13
 # Modify on: 2018/06/16
