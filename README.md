@@ -30,6 +30,6 @@ you can skip this step as you like.
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/KMeans)
 
-## 5. DBSCAN
+## 6. DBSCAN
 
 [LINK of Implementation](https://github.com/quqixun/MLAlgorithms/tree/master/DBSCAN)
